@@ -45,7 +45,6 @@ const demoApplications = [
     url: "",
     notes: "Follow up after interview.",
   },
-
   {
     company: "Hana Microfinance",
     position: "Communication Officer",
@@ -57,7 +56,6 @@ const demoApplications = [
     url: "",
     notes: "Communication team interview completed.",
   },
-
   {
     company: "ONOW Myanmar",
     position: "Program Coordinator",
@@ -69,7 +67,6 @@ const demoApplications = [
     url: "",
     notes: "Pre-test submitted.",
   },
-
   {
     company: "WFP",
     position: "Programme Associate",
@@ -81,7 +78,6 @@ const demoApplications = [
     url: "",
     notes: "Programme Associate application.",
   },
-
   {
     company: "CHAI",
     position: "Assistant Program Officer",
@@ -137,7 +133,7 @@ function createId() {
       return crypto.randomUUID();
     }
   } catch {
-    /* fallback below */
+    /* fallback */
   }
 
   return `${Date.now().toString(36)}-${Math.random()
@@ -206,22 +202,17 @@ function formatDate(value) {
     return "-";
   }
 
-  const dateValue = new Date(
-    `${value}T00:00:00`
-  );
+  const dateValue = new Date(`${value}T00:00:00`);
 
   if (Number.isNaN(dateValue.getTime())) {
     return esc(value);
   }
 
-  return dateValue.toLocaleDateString(
-    "en-US",
-    {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    }
-  );
+  return dateValue.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }
 
 /* =========================================
@@ -237,9 +228,7 @@ function normalizeApp(application) {
   }
 
   return {
-    id: String(
-      application.id || createId()
-    ),
+    id: String(application.id || createId()),
 
     company: String(
       application.company || ""
@@ -271,9 +260,7 @@ function normalizeApp(application) {
       application.date || ""
     ),
 
-    url: safeUrl(
-      application.url
-    ),
+    url: safeUrl(application.url),
 
     notes: String(
       application.notes || ""
@@ -292,20 +279,23 @@ function normalizeProfile(value) {
       ? value
       : {};
 
+  const photo =
+    typeof profileData.photo === "string"
+      ? profileData.photo
+      : "";
+
   return {
     ...defaultProfile,
 
     name:
       String(
         profileData.name || ""
-      ).trim() ||
-      "Job Seeker",
+      ).trim() || "Job Seeker",
 
     role:
       String(
         profileData.role || ""
-      ).trim() ||
-      "Job Seeker",
+      ).trim() || "Job Seeker",
 
     email: String(
       profileData.email || ""
@@ -318,18 +308,13 @@ function normalizeProfile(value) {
     location:
       String(
         profileData.location || ""
-      ).trim() ||
-      "Myanmar",
+      ).trim() || "Myanmar",
 
     bio: String(
       profileData.bio || ""
     ).trim(),
 
-    photo:
-      typeof profileData.photo ===
-      "string"
-        ? profileData.photo
-        : "",
+    photo,
   };
 }
 
@@ -344,21 +329,35 @@ function saveApps(applicationList) {
     .map(normalizeApp)
     .filter(Boolean);
 
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(normalized)
-  );
+  try {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(normalized)
+    );
+  } catch (error) {
+    console.error(
+      "Unable to save applications:",
+      error
+    );
+
+    toast(
+      "Unable to save applications.",
+      "error"
+    );
+
+    return false;
+  }
 
   window.dispatchEvent(
     new Event("jobtrack:apps")
   );
+
+  return true;
 }
 
 function apps() {
   const raw =
-    localStorage.getItem(
-      STORAGE_KEY
-    );
+    localStorage.getItem(STORAGE_KEY);
 
   if (!raw) {
     const demo =
@@ -370,10 +369,14 @@ function apps() {
           })
       );
 
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(demo)
-    );
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(demo)
+      );
+    } catch {
+      /* ignore */
+    }
 
     return demo;
   }
@@ -409,27 +412,73 @@ function apps() {
 
 function profile() {
   try {
+    const raw =
+      localStorage.getItem(PROFILE_KEY);
+
+    if (!raw) {
+      return normalizeProfile(
+        defaultProfile
+      );
+    }
+
     return normalizeProfile(
-      JSON.parse(
-        localStorage.getItem(
-          PROFILE_KEY
-        ) || "null"
-      )
+      JSON.parse(raw)
     );
-  } catch {
-    return normalizeProfile(null);
+  } catch (error) {
+    console.error(
+      "Unable to read profile:",
+      error
+    );
+
+    return normalizeProfile(
+      defaultProfile
+    );
   }
 }
+
+/* =========================================
+   SAVE PROFILE
+========================================= */
 
 function saveProfile(value) {
   const normalized =
     normalizeProfile(value);
 
   try {
+    const serialized =
+      JSON.stringify(normalized);
+
     localStorage.setItem(
       PROFILE_KEY,
-      JSON.stringify(normalized)
+      serialized
     );
+
+    /*
+      Verify that the browser actually saved it.
+    */
+
+    const saved =
+      localStorage.getItem(
+        PROFILE_KEY
+      );
+
+    if (!saved) {
+      throw new Error(
+        "Profile was not stored."
+      );
+    }
+
+    const parsed =
+      JSON.parse(saved);
+
+    if (
+      normalized.photo &&
+      !parsed.photo
+    ) {
+      throw new Error(
+        "Photo was not stored."
+      );
+    }
   } catch (error) {
     console.error(
       "Unable to save profile:",
@@ -437,7 +486,7 @@ function saveProfile(value) {
     );
 
     toast(
-      "Unable to save profile. Storage may be full.",
+      "Unable to save profile. Browser storage may be full.",
       "error"
     );
 
@@ -506,7 +555,7 @@ function initials(name) {
 }
 
 /* =========================================
-   PROFILE PHOTO FALLBACK
+   PROFILE PHOTO
 ========================================= */
 
 function renderProfilePhoto() {
@@ -519,76 +568,11 @@ function renderProfilePhoto() {
   const currentProfile =
     profile();
 
-  if (!preview) {
-    if (fallback) {
-      fallback.textContent =
-        initials(
-          currentProfile.name
-        );
-
-      fallback.style.display =
-        "flex";
+  const showFallback = () => {
+    if (preview) {
+      preview.removeAttribute("src");
+      preview.style.display = "none";
     }
-
-    return;
-  }
-
-  /* -----------------------------------------
-     No photo
-  ----------------------------------------- */
-
-  if (!currentProfile.photo) {
-    preview.removeAttribute(
-      "src"
-    );
-
-    preview.style.display =
-      "none";
-
-    preview.alt = "";
-
-    if (fallback) {
-      fallback.textContent =
-        initials(
-          currentProfile.name
-        );
-
-      fallback.style.display =
-        "flex";
-    }
-
-    return;
-  }
-
-  /* -----------------------------------------
-     Photo exists
-  ----------------------------------------- */
-
-  preview.src =
-    currentProfile.photo;
-
-  preview.alt =
-    `${currentProfile.name} profile photo`;
-
-  preview.style.display =
-    "block";
-
-  if (fallback) {
-    fallback.style.display =
-      "none";
-  }
-
-  /* -----------------------------------------
-     Broken image fallback
-  ----------------------------------------- */
-
-  preview.onerror = () => {
-    preview.removeAttribute(
-      "src"
-    );
-
-    preview.style.display =
-      "none";
 
     if (fallback) {
       fallback.textContent =
@@ -600,6 +584,52 @@ function renderProfilePhoto() {
         "flex";
     }
   };
+
+  /*
+     If the image element does not exist,
+     just show initials.
+  */
+
+  if (!preview) {
+    showFallback();
+    return;
+  }
+
+  /*
+     No saved photo.
+  */
+
+  if (!currentProfile.photo) {
+    showFallback();
+    return;
+  }
+
+  /*
+     Wait until image has actually loaded.
+  */
+
+  preview.style.display =
+    "none";
+
+  preview.alt =
+    `${currentProfile.name} profile photo`;
+
+  preview.onload = () => {
+    preview.style.display =
+      "block";
+
+    if (fallback) {
+      fallback.style.display =
+        "none";
+    }
+  };
+
+  preview.onerror = () => {
+    showFallback();
+  };
+
+  preview.src =
+    currentProfile.photo;
 }
 
 /* =========================================
@@ -614,16 +644,16 @@ function avatar(node) {
   const currentProfile =
     profile();
 
-  /* Clear old avatar */
-
   node.innerHTML = "";
 
-  /* -----------------------------------------
+  /*
      Initials fallback
-  ----------------------------------------- */
+  */
 
   const fallback =
-    document.createElement("span");
+    document.createElement(
+      "span"
+    );
 
   fallback.className =
     "avatar-fallback";
@@ -637,20 +667,22 @@ function avatar(node) {
     fallback
   );
 
-  /* -----------------------------------------
+  /*
      No photo
-  ----------------------------------------- */
+  */
 
   if (!currentProfile.photo) {
     return;
   }
 
-  /* -----------------------------------------
-     Create image safely
-  ----------------------------------------- */
+  /*
+     Profile image
+  */
 
   const image =
-    document.createElement("img");
+    document.createElement(
+      "img"
+    );
 
   image.src =
     currentProfile.photo;
@@ -661,20 +693,20 @@ function avatar(node) {
       : "Profile photo";
 
   image.addEventListener(
+    "load",
+    () => {
+      fallback.style.display =
+        "none";
+    }
+  );
+
+  image.addEventListener(
     "error",
     () => {
       image.remove();
 
       fallback.style.display =
         "flex";
-    }
-  );
-
-  image.addEventListener(
-    "load",
-    () => {
-      fallback.style.display =
-        "none";
     }
   );
 
@@ -781,10 +813,14 @@ function applyTheme(theme) {
     theme === "dark"
   );
 
-  localStorage.setItem(
-    THEME_KEY,
-    theme
-  );
+  try {
+    localStorage.setItem(
+      THEME_KEY,
+      theme
+    );
+  } catch {
+    /* ignore */
+  }
 
   updateThemeButtons(theme);
 
@@ -1009,13 +1045,11 @@ function dashboard() {
       "interviewProgress",
       "Interview",
     ],
-
     [
       "testRate",
       "testProgress",
       "Test",
     ],
-
     [
       "offerRate",
       "offerProgress",
@@ -1415,10 +1449,6 @@ function renderTable() {
     el("statusFilter")
       ?.value || "";
 
-  /* -----------------------------------------
-     Search
-  ----------------------------------------- */
-
   if (searchQuery) {
     applicationList =
       applicationList.filter(
@@ -1440,10 +1470,6 @@ function renderTable() {
       );
   }
 
-  /* -----------------------------------------
-     Status filter
-  ----------------------------------------- */
-
   if (statusFilter) {
     applicationList =
       applicationList.filter(
@@ -1452,10 +1478,6 @@ function renderTable() {
           statusFilter
       );
   }
-
-  /* -----------------------------------------
-     Sort newest first
-  ----------------------------------------- */
 
   applicationList.sort(
     (a, b) =>
@@ -1947,9 +1969,14 @@ function jobForm() {
         );
       }
 
-      saveApps(
-        applicationList
-      );
+      const saved =
+        saveApps(
+          applicationList
+        );
+
+      if (!saved) {
+        return;
+      }
 
       toast(
         existingIndex >= 0
@@ -1981,7 +2008,7 @@ function profilePage() {
     profile();
 
   /* -----------------------------------------
-     Fill profile fields
+     Fill fields
   ----------------------------------------- */
 
   [
@@ -2016,21 +2043,22 @@ function profilePage() {
   const photoInput =
     el("profilePhoto");
 
-  /* -----------------------------------------
-     Initial photo render
-  ----------------------------------------- */
-
-  renderProfilePhoto();
-
-  /* -----------------------------------------
-     Local photo variable
-  ----------------------------------------- */
+  /*
+     Keep photo data in this variable
+     until Save Profile is pressed.
+  */
 
   let photo =
     currentProfile.photo || "";
 
+  /*
+     Render saved photo.
+  */
+
+  renderProfilePhoto();
+
   /* -----------------------------------------
-     Photo input
+     PHOTO SELECT
   ----------------------------------------- */
 
   photoInput?.addEventListener(
@@ -2043,9 +2071,9 @@ function profilePage() {
         return;
       }
 
-      /* ---------------------------------------
-         Validate file type
-      --------------------------------------- */
+      /*
+         Check image type.
+      */
 
       if (
         !file.type ||
@@ -2064,9 +2092,9 @@ function profilePage() {
         return;
       }
 
-      /* ---------------------------------------
-         Validate file size
-      --------------------------------------- */
+      /*
+         Maximum 2MB.
+      */
 
       const maxSize =
         2 * 1024 * 1024;
@@ -2083,9 +2111,9 @@ function profilePage() {
         return;
       }
 
-      /* ---------------------------------------
-         FileReader
-      --------------------------------------- */
+      /*
+         Read image.
+      */
 
       const reader =
         new FileReader();
@@ -2103,12 +2131,16 @@ function profilePage() {
           return;
         }
 
+        /*
+           Store the Data URL in memory.
+        */
+
         photo =
           reader.result;
 
-        /* -------------------------------------
-           Immediate preview
-        ------------------------------------- */
+        /*
+           Show preview immediately.
+        */
 
         if (preview) {
           preview.onload = () => {
@@ -2147,18 +2179,15 @@ function profilePage() {
             );
           };
 
-          preview.src =
-            photo;
-
           preview.alt =
             `${
               form.elements.name?.value ||
               currentProfile.name ||
               "Profile"
             } profile photo`;
-        } else if (fallback) {
-          fallback.style.display =
-            "none";
+
+          preview.src =
+            photo;
         }
       };
 
@@ -2174,7 +2203,7 @@ function profilePage() {
   );
 
   /* -----------------------------------------
-     Update fallback initials while typing name
+     UPDATE INITIALS
   ----------------------------------------- */
 
   const nameField =
@@ -2183,10 +2212,6 @@ function profilePage() {
   nameField?.addEventListener(
     "input",
     () => {
-      const name =
-        nameField.value.trim() ||
-        "Job Seeker";
-
       if (
         fallback &&
         (!photo ||
@@ -2195,13 +2220,16 @@ function profilePage() {
             "none")
       ) {
         fallback.textContent =
-          initials(name);
+          initials(
+            nameField.value.trim() ||
+            "Job Seeker"
+          );
       }
     }
   );
 
   /* -----------------------------------------
-     Submit
+     SAVE PROFILE
   ----------------------------------------- */
 
   form.addEventListener(
@@ -2220,27 +2248,68 @@ function profilePage() {
 
       const updatedProfile = {
         name:
-          formData.get("name"),
+          String(
+            formData.get("name") ||
+              ""
+          ).trim(),
 
         role:
-          formData.get("role"),
+          String(
+            formData.get("role") ||
+              ""
+          ).trim(),
 
         email:
-          formData.get("email"),
+          String(
+            formData.get("email") ||
+              ""
+          ).trim(),
 
         phone:
-          formData.get("phone"),
+          String(
+            formData.get("phone") ||
+              ""
+          ).trim(),
 
         location:
-          formData.get(
-            "location"
-          ),
+          String(
+            formData.get(
+              "location"
+            ) || ""
+          ).trim(),
 
         bio:
-          formData.get("bio"),
+          String(
+            formData.get("bio") ||
+              ""
+          ).trim(),
 
-        photo,
+        /*
+           IMPORTANT:
+           Keep the selected photo.
+        */
+
+        photo:
+          photo || "",
       };
+
+      /*
+         Debug information.
+         This does NOT use eval.
+      */
+
+      console.log(
+        "Profile save:",
+        {
+          name:
+            updatedProfile.name,
+
+          photo:
+            updatedProfile.photo
+              ? "PHOTO READY"
+              : "NO PHOTO",
+        }
+      );
 
       const saved =
         saveProfile(
@@ -2251,7 +2320,37 @@ function profilePage() {
         return;
       }
 
+      /*
+         Read the profile again from
+         localStorage to make sure
+         the photo really exists.
+      */
+
+      const savedProfile =
+        profile();
+
+      console.log(
+        "Profile storage check:",
+        {
+          photo:
+            savedProfile.photo
+              ? "PHOTO SAVED"
+              : "NO PHOTO",
+        }
+      );
+
+      /*
+         Refresh all profile UI.
+      */
+
       syncProfile();
+
+      /*
+         Keep the photo variable synced.
+      */
+
+      photo =
+        savedProfile.photo || "";
 
       toast(
         "Profile saved successfully."
@@ -2271,6 +2370,39 @@ function kanban() {
   if (!wrapper) {
     return;
   }
+
+  const setupKanbanDragEvents =
+    () => {
+      $$(".kanban-card").forEach(
+        (card) => {
+          card.addEventListener(
+            "dragstart",
+            (event) => {
+              event.dataTransfer.effectAllowed =
+                "move";
+
+              event.dataTransfer.setData(
+                "text/plain",
+                card.dataset.id
+              );
+
+              card.classList.add(
+                "dragging"
+              );
+            }
+          );
+
+          card.addEventListener(
+            "dragend",
+            () => {
+              card.classList.remove(
+                "dragging"
+              );
+            }
+          );
+        }
+      );
+    };
 
   const render = () => {
     const applicationList =
@@ -2407,39 +2539,6 @@ function kanban() {
     setupKanbanDragEvents();
   };
 
-  const setupKanbanDragEvents =
-    () => {
-      $$(".kanban-card").forEach(
-        (card) => {
-          card.addEventListener(
-            "dragstart",
-            (event) => {
-              event.dataTransfer.effectAllowed =
-                "move";
-
-              event.dataTransfer.setData(
-                "text/plain",
-                card.dataset.id
-              );
-
-              card.classList.add(
-                "dragging"
-              );
-            }
-          );
-
-          card.addEventListener(
-            "dragend",
-            () => {
-              card.classList.remove(
-                "dragging"
-              );
-            }
-          );
-        }
-      );
-    };
-
   $$(".kanban-list").forEach(
     (list) => {
       list.addEventListener(
@@ -2501,9 +2600,14 @@ function kanban() {
           application.status =
             newStatus;
 
-          saveApps(
-            applicationList
-          );
+          const saved =
+            saveApps(
+              applicationList
+            );
+
+          if (!saved) {
+            return;
+          }
 
           render();
           dashboard();
@@ -2551,7 +2655,12 @@ function settings() {
             })
         );
 
-      saveApps(demo);
+      const saved =
+        saveApps(demo);
+
+      if (!saved) {
+        return;
+      }
 
       toast(
         "Demo data restored."
@@ -2581,7 +2690,12 @@ function settings() {
         return;
       }
 
-      saveApps([]);
+      const saved =
+        saveApps([]);
+
+      if (!saved) {
+        return;
+      }
 
       toast(
         "All applications deleted."
@@ -2740,9 +2854,10 @@ window.addEventListener(
 document.addEventListener(
   "DOMContentLoaded",
   () => {
-    /* ---------------------------------------
+    /*
        Create default profile
-    --------------------------------------- */
+       only if no profile exists.
+    */
 
     if (
       !localStorage.getItem(
@@ -2754,9 +2869,9 @@ document.addEventListener(
       );
     }
 
-    /* ---------------------------------------
+    /*
        Global setup
-    --------------------------------------- */
+    */
 
     setupTheme();
     mobile();
@@ -2764,15 +2879,15 @@ document.addEventListener(
     back();
     globalSearch();
 
-    /* ---------------------------------------
-       Profile sync
-    --------------------------------------- */
+    /*
+       Profile
+    */
 
     syncProfile();
 
-    /* ---------------------------------------
+    /*
        Page modules
-    --------------------------------------- */
+    */
 
     dashboard();
     applicationsPage();
