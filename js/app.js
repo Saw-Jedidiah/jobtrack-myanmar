@@ -45,6 +45,7 @@ const demoApplications = [
     url: "",
     notes: "Follow up after interview.",
   },
+
   {
     company: "Hana Microfinance",
     position: "Communication Officer",
@@ -56,6 +57,7 @@ const demoApplications = [
     url: "",
     notes: "Communication team interview completed.",
   },
+
   {
     company: "ONOW Myanmar",
     position: "Program Coordinator",
@@ -67,6 +69,7 @@ const demoApplications = [
     url: "",
     notes: "Pre-test submitted.",
   },
+
   {
     company: "WFP",
     position: "Programme Associate",
@@ -78,6 +81,7 @@ const demoApplications = [
     url: "",
     notes: "Programme Associate application.",
   },
+
   {
     company: "CHAI",
     position: "Assistant Program Officer",
@@ -125,12 +129,20 @@ const el = (...ids) =>
 ========================================= */
 
 function createId() {
-  return (
-    crypto?.randomUUID?.() ||
-    `${Date.now().toString(36)}-${Math.random()
-      .toString(36)
-      .slice(2, 9)}`
-  );
+  try {
+    if (
+      typeof crypto !== "undefined" &&
+      typeof crypto.randomUUID === "function"
+    ) {
+      return crypto.randomUUID();
+    }
+  } catch {
+    /* fallback below */
+  }
+
+  return `${Date.now().toString(36)}-${Math.random()
+    .toString(36)
+    .slice(2, 9)}`;
 }
 
 /* =========================================
@@ -156,7 +168,9 @@ function esc(value) {
 ========================================= */
 
 function safeUrl(value) {
-  if (!value) return "";
+  if (!value) {
+    return "";
+  }
 
   try {
     const url = new URL(value, location.origin);
@@ -188,19 +202,26 @@ function statusClass(value) {
 ========================================= */
 
 function formatDate(value) {
-  if (!value) return "-";
+  if (!value) {
+    return "-";
+  }
 
-  const dateValue = new Date(`${value}T00:00:00`);
+  const dateValue = new Date(
+    `${value}T00:00:00`
+  );
 
   if (Number.isNaN(dateValue.getTime())) {
     return esc(value);
   }
 
-  return dateValue.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  return dateValue.toLocaleDateString(
+    "en-US",
+    {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    }
+  );
 }
 
 /* =========================================
@@ -208,32 +229,55 @@ function formatDate(value) {
 ========================================= */
 
 function normalizeApp(application) {
-  if (!application || typeof application !== "object") {
+  if (
+    !application ||
+    typeof application !== "object"
+  ) {
     return null;
   }
 
   return {
-    id: String(application.id || createId()),
+    id: String(
+      application.id || createId()
+    ),
 
-    company: String(application.company || "").trim(),
+    company: String(
+      application.company || ""
+    ).trim(),
 
-    position: String(application.position || "").trim(),
+    position: String(
+      application.position || ""
+    ).trim(),
 
-    location: String(application.location || "").trim(),
+    location: String(
+      application.location || ""
+    ).trim(),
 
-    salary: String(application.salary || "").trim(),
+    salary: String(
+      application.salary || ""
+    ).trim(),
 
-    jobType: JOB_TYPES.includes(application.jobType)
+    jobType: JOB_TYPES.includes(
+      application.jobType
+    )
       ? application.jobType
       : "Full-time",
 
-    status: normalizeStatus(application.status),
+    status: normalizeStatus(
+      application.status
+    ),
 
-    date: String(application.date || ""),
+    date: String(
+      application.date || ""
+    ),
 
-    url: safeUrl(application.url),
+    url: safeUrl(
+      application.url
+    ),
 
-    notes: String(application.notes || "").trim(),
+    notes: String(
+      application.notes || ""
+    ).trim(),
   };
 }
 
@@ -242,8 +286,9 @@ function normalizeApp(application) {
 ========================================= */
 
 function normalizeProfile(value) {
-  const profile =
-    value && typeof value === "object"
+  const profileData =
+    value &&
+    typeof value === "object"
       ? value
       : {};
 
@@ -251,26 +296,39 @@ function normalizeProfile(value) {
     ...defaultProfile,
 
     name:
-      String(profile.name || "").trim() ||
+      String(
+        profileData.name || ""
+      ).trim() ||
       "Job Seeker",
 
     role:
-      String(profile.role || "").trim() ||
+      String(
+        profileData.role || ""
+      ).trim() ||
       "Job Seeker",
 
-    email: String(profile.email || "").trim(),
+    email: String(
+      profileData.email || ""
+    ).trim(),
 
-    phone: String(profile.phone || "").trim(),
+    phone: String(
+      profileData.phone || ""
+    ).trim(),
 
     location:
-      String(profile.location || "").trim() ||
+      String(
+        profileData.location || ""
+      ).trim() ||
       "Myanmar",
 
-    bio: String(profile.bio || "").trim(),
+    bio: String(
+      profileData.bio || ""
+    ).trim(),
 
     photo:
-      typeof profile.photo === "string"
-        ? profile.photo
+      typeof profileData.photo ===
+      "string"
+        ? profileData.photo
         : "",
   };
 }
@@ -280,7 +338,9 @@ function normalizeProfile(value) {
 ========================================= */
 
 function saveApps(applicationList) {
-  const normalized = (applicationList || [])
+  const normalized = (
+    applicationList || []
+  )
     .map(normalizeApp)
     .filter(Boolean);
 
@@ -295,15 +355,20 @@ function saveApps(applicationList) {
 }
 
 function apps() {
-  const raw = localStorage.getItem(STORAGE_KEY);
+  const raw =
+    localStorage.getItem(
+      STORAGE_KEY
+    );
 
   if (!raw) {
-    const demo = demoApplications.map((application) =>
-      normalizeApp({
-        ...application,
-        id: createId(),
-      })
-    );
+    const demo =
+      demoApplications.map(
+        (application) =>
+          normalizeApp({
+            ...application,
+            id: createId(),
+          })
+      );
 
     localStorage.setItem(
       STORAGE_KEY,
@@ -314,18 +379,23 @@ function apps() {
   }
 
   try {
-    const parsed = JSON.parse(raw);
+    const parsed =
+      JSON.parse(raw);
 
     return Array.isArray(parsed)
-      ? parsed.map(normalizeApp).filter(Boolean)
+      ? parsed
+          .map(normalizeApp)
+          .filter(Boolean)
       : [];
   } catch {
-    const demo = demoApplications.map((application) =>
-      normalizeApp({
-        ...application,
-        id: createId(),
-      })
-    );
+    const demo =
+      demoApplications.map(
+        (application) =>
+          normalizeApp({
+            ...application,
+            id: createId(),
+          })
+      );
 
     saveApps(demo);
 
@@ -341,7 +411,9 @@ function profile() {
   try {
     return normalizeProfile(
       JSON.parse(
-        localStorage.getItem(PROFILE_KEY) || "null"
+        localStorage.getItem(
+          PROFILE_KEY
+        ) || "null"
       )
     );
   } catch {
@@ -350,35 +422,66 @@ function profile() {
 }
 
 function saveProfile(value) {
-  localStorage.setItem(
-    PROFILE_KEY,
-    JSON.stringify(normalizeProfile(value))
-  );
+  const normalized =
+    normalizeProfile(value);
+
+  try {
+    localStorage.setItem(
+      PROFILE_KEY,
+      JSON.stringify(normalized)
+    );
+  } catch (error) {
+    console.error(
+      "Unable to save profile:",
+      error
+    );
+
+    toast(
+      "Unable to save profile. Storage may be full.",
+      "error"
+    );
+
+    return false;
+  }
 
   window.dispatchEvent(
     new Event("jobtrack:profile")
   );
+
+  return true;
 }
 
 /* =========================================
    TOAST
 ========================================= */
 
-function toast(message, type = "success") {
-  const toastElement = el("toast");
+function toast(
+  message,
+  type = "success"
+) {
+  const toastElement =
+    el("toast");
 
-  if (!toastElement) return;
+  if (!toastElement) {
+    return;
+  }
 
-  toastElement.textContent = message;
+  toastElement.textContent =
+    message;
 
   toastElement.className =
     `toast ${type} show`;
 
-  clearTimeout(toast.timer);
+  clearTimeout(
+    toastElement.timer
+  );
 
-  toast.timer = setTimeout(() => {
-    toastElement.classList.remove("show");
-  }, 2800);
+  toastElement.timer =
+    setTimeout(() => {
+      toastElement.classList.remove(
+        "show"
+      );
+    }, 2800);
 }
 
 /* =========================================
@@ -386,15 +489,117 @@ function toast(message, type = "success") {
 ========================================= */
 
 function initials(name) {
-  return (
-    String(name || "Job Seeker")
+  const result =
+    String(
+      name || "Job Seeker"
+    )
       .trim()
       .split(/\s+/)
       .slice(0, 2)
-      .map((word) => word[0])
+      .map(
+        (word) => word[0]
+      )
       .join("")
-      .toUpperCase() || "J"
-  );
+      .toUpperCase();
+
+  return result || "J";
+}
+
+/* =========================================
+   PROFILE PHOTO FALLBACK
+========================================= */
+
+function renderProfilePhoto() {
+  const preview =
+    el("profilePreview");
+
+  const fallback =
+    el("profileFallback");
+
+  const currentProfile =
+    profile();
+
+  if (!preview) {
+    if (fallback) {
+      fallback.textContent =
+        initials(
+          currentProfile.name
+        );
+
+      fallback.style.display =
+        "flex";
+    }
+
+    return;
+  }
+
+  /* -----------------------------------------
+     No photo
+  ----------------------------------------- */
+
+  if (!currentProfile.photo) {
+    preview.removeAttribute(
+      "src"
+    );
+
+    preview.style.display =
+      "none";
+
+    preview.alt = "";
+
+    if (fallback) {
+      fallback.textContent =
+        initials(
+          currentProfile.name
+        );
+
+      fallback.style.display =
+        "flex";
+    }
+
+    return;
+  }
+
+  /* -----------------------------------------
+     Photo exists
+  ----------------------------------------- */
+
+  preview.src =
+    currentProfile.photo;
+
+  preview.alt =
+    `${currentProfile.name} profile photo`;
+
+  preview.style.display =
+    "block";
+
+  if (fallback) {
+    fallback.style.display =
+      "none";
+  }
+
+  /* -----------------------------------------
+     Broken image fallback
+  ----------------------------------------- */
+
+  preview.onerror = () => {
+    preview.removeAttribute(
+      "src"
+    );
+
+    preview.style.display =
+      "none";
+
+    if (fallback) {
+      fallback.textContent =
+        initials(
+          currentProfile.name
+        );
+
+      fallback.style.display =
+        "flex";
+    }
+  };
 }
 
 /* =========================================
@@ -402,22 +607,80 @@ function initials(name) {
 ========================================= */
 
 function avatar(node) {
-  if (!node) return;
+  if (!node) {
+    return;
+  }
 
-  const currentProfile = profile();
+  const currentProfile =
+    profile();
 
-  if (currentProfile.photo) {
-    node.innerHTML = `
-      <img
-        src="${esc(currentProfile.photo)}"
-        alt="${esc(currentProfile.name)}"
-      >
-    `;
-  } else {
-    node.textContent = initials(
+  /* Clear old avatar */
+
+  node.innerHTML = "";
+
+  /* -----------------------------------------
+     Initials fallback
+  ----------------------------------------- */
+
+  const fallback =
+    document.createElement("span");
+
+  fallback.className =
+    "avatar-fallback";
+
+  fallback.textContent =
+    initials(
       currentProfile.name
     );
+
+  node.appendChild(
+    fallback
+  );
+
+  /* -----------------------------------------
+     No photo
+  ----------------------------------------- */
+
+  if (!currentProfile.photo) {
+    return;
   }
+
+  /* -----------------------------------------
+     Create image safely
+  ----------------------------------------- */
+
+  const image =
+    document.createElement("img");
+
+  image.src =
+    currentProfile.photo;
+
+  image.alt =
+    currentProfile.name
+      ? `${currentProfile.name} profile photo`
+      : "Profile photo";
+
+  image.addEventListener(
+    "error",
+    () => {
+      image.remove();
+
+      fallback.style.display =
+        "flex";
+    }
+  );
+
+  image.addEventListener(
+    "load",
+    () => {
+      fallback.style.display =
+        "none";
+    }
+  );
+
+  node.appendChild(
+    image
+  );
 }
 
 /* =========================================
@@ -425,7 +688,8 @@ function avatar(node) {
 ========================================= */
 
 function syncProfile() {
-  const currentProfile = profile();
+  const currentProfile =
+    profile();
 
   [
     el("headerName"),
@@ -434,7 +698,8 @@ function syncProfile() {
   ]
     .filter(Boolean)
     .forEach((element) => {
-      element.textContent = currentProfile.name;
+      element.textContent =
+        currentProfile.name;
     });
 
   [
@@ -443,7 +708,8 @@ function syncProfile() {
   ]
     .filter(Boolean)
     .forEach((element) => {
-      element.textContent = currentProfile.role;
+      element.textContent =
+        currentProfile.role;
     });
 
   [
@@ -453,15 +719,7 @@ function syncProfile() {
     .filter(Boolean)
     .forEach(avatar);
 
-  const preview = el("profilePreview");
-
-  if (preview) {
-    if (currentProfile.photo) {
-      preview.src = currentProfile.photo;
-    } else {
-      preview.removeAttribute("src");
-    }
-  }
+  renderProfilePhoto();
 }
 
 /* =========================================
@@ -469,14 +727,18 @@ function syncProfile() {
 ========================================= */
 
 function getTheme() {
-  let theme = localStorage.getItem(THEME_KEY);
+  let theme =
+    localStorage.getItem(
+      THEME_KEY
+    );
 
   if (!theme) {
-    theme = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches
-      ? "dark"
-      : "light";
+    theme =
+      window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches
+        ? "dark"
+        : "light";
   }
 
   return theme === "dark"
@@ -484,29 +746,33 @@ function getTheme() {
     : "light";
 }
 
-function updateThemeButtons(theme) {
-  $$(".theme-toggle").forEach((button) => {
-    button.textContent =
-      theme === "dark"
-        ? "☀"
-        : "☾";
-
-    button.setAttribute(
-      "aria-label",
-      `Switch to ${
+function updateThemeButtons(
+  theme
+) {
+  $$(".theme-toggle").forEach(
+    (button) => {
+      button.textContent =
         theme === "dark"
-          ? "light"
-          : "dark"
-      } mode`
-    );
+          ? "☀"
+          : "☾";
 
-    button.setAttribute(
-      "title",
-      theme === "dark"
-        ? "Switch to light mode"
-        : "Switch to dark mode"
-    );
-  });
+      button.setAttribute(
+        "aria-label",
+        `Switch to ${
+          theme === "dark"
+            ? "light"
+            : "dark"
+        } mode`
+      );
+
+      button.setAttribute(
+        "title",
+        theme === "dark"
+          ? "Switch to light mode"
+          : "Switch to dark mode"
+      );
+    }
+  );
 }
 
 function applyTheme(theme) {
@@ -522,7 +788,10 @@ function applyTheme(theme) {
 
   updateThemeButtons(theme);
 
-  if (typeof Chart !== "undefined") {
+  if (
+    typeof Chart !==
+    "undefined"
+  ) {
     setTimeout(() => {
       renderCharts();
     }, 50);
@@ -530,24 +799,33 @@ function applyTheme(theme) {
 }
 
 function setupTheme() {
-  const theme = getTheme();
+  const theme =
+    getTheme();
 
   applyTheme(theme);
 
-  $$(".theme-toggle").forEach((button) => {
-    button.addEventListener("click", () => {
-      const currentTheme =
-        document.body.classList.contains("dark")
-          ? "dark"
-          : "light";
+  $$(".theme-toggle").forEach(
+    (button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          const currentTheme =
+            document.body.classList.contains(
+              "dark"
+            )
+              ? "dark"
+              : "light";
 
-      applyTheme(
-        currentTheme === "dark"
-          ? "light"
-          : "dark"
+          applyTheme(
+            currentTheme ===
+              "dark"
+              ? "light"
+              : "dark"
+          );
+        }
       );
-    });
-  });
+    }
+  );
 }
 
 /* =========================================
@@ -555,30 +833,43 @@ function setupTheme() {
 ========================================= */
 
 function mobile() {
-  const sidebar = el("sidebar");
+  const sidebar =
+    el("sidebar");
 
-  const button = el(
-    "mobileMenu",
-    "mobileMenuBtn"
-  );
+  const button =
+    el(
+      "mobileMenu",
+      "mobileMenuBtn"
+    );
 
-  const overlay = el(
-    "mobileOverlay",
-    "sidebarOverlay"
-  );
+  const overlay =
+    el(
+      "mobileOverlay",
+      "sidebarOverlay"
+    );
 
-  if (!sidebar || !button) {
+  if (
+    !sidebar ||
+    !button
+  ) {
     return;
   }
 
   const close = () => {
-    sidebar.classList.remove("open");
-    overlay?.classList.remove("show");
+    sidebar.classList.remove(
+      "open"
+    );
+
+    overlay?.classList.remove(
+      "show"
+    );
   };
 
   const toggle = () => {
     const isOpen =
-      sidebar.classList.toggle("open");
+      sidebar.classList.toggle(
+        "open"
+      );
 
     overlay?.classList.toggle(
       "show",
@@ -596,17 +887,21 @@ function mobile() {
     close
   );
 
-  $$(".sidebar a").forEach((link) => {
-    link.addEventListener(
-      "click",
-      close
-    );
-  });
+  $$(".sidebar a").forEach(
+    (link) => {
+      link.addEventListener(
+        "click",
+        close
+      );
+    }
+  );
 
   document.addEventListener(
     "keydown",
     (event) => {
-      if (event.key === "Escape") {
+      if (
+        event.key === "Escape"
+      ) {
         close();
       }
     }
@@ -618,7 +913,8 @@ function mobile() {
 ========================================= */
 
 function activeNav() {
-  const links = $$(".sidebar a");
+  const links =
+    $$(".sidebar a");
 
   const currentPage =
     location.pathname
@@ -628,7 +924,9 @@ function activeNav() {
 
   links.forEach((link) => {
     const href =
-      link.getAttribute("href") || "";
+      link.getAttribute(
+        "href"
+      ) || "";
 
     const targetPage =
       href
@@ -652,29 +950,46 @@ function activeNav() {
 let trendChart = null;
 let statusChart = null;
 
+/* =========================================
+   DASHBOARD
+========================================= */
+
 function dashboard() {
-  if (!el("totalApplications")) {
+  if (
+    !el("totalApplications")
+  ) {
     return;
   }
 
-  const applicationList = apps();
+  const applicationList =
+    apps();
 
   const total =
     applicationList.length;
 
-  const count = (currentStatus) =>
-    applicationList.filter(
-      (application) =>
-        application.status === currentStatus
-    ).length;
+  const count =
+    (currentStatus) =>
+      applicationList.filter(
+        (application) =>
+          application.status ===
+          currentStatus
+      ).length;
 
-  if (el("totalApplications")) {
-    el("totalApplications").textContent =
+  if (
+    el("totalApplications")
+  ) {
+    el(
+      "totalApplications"
+    ).textContent =
       total;
   }
 
-  if (el("interviewCount")) {
-    el("interviewCount").textContent =
+  if (
+    el("interviewCount")
+  ) {
+    el(
+      "interviewCount"
+    ).textContent =
       count("Interview");
   }
 
@@ -694,11 +1009,13 @@ function dashboard() {
       "interviewProgress",
       "Interview",
     ],
+
     [
       "testRate",
       "testProgress",
       "Test",
     ],
+
     [
       "offerRate",
       "offerProgress",
@@ -707,15 +1024,25 @@ function dashboard() {
   ];
 
   performanceItems.forEach(
-    ([textId, progressId, currentStatus]) => {
-      const percentage = total
-        ? Math.round(
-            (count(currentStatus) / total) *
-              100
-          )
-        : 0;
+    ([
+      textId,
+      progressId,
+      currentStatus,
+    ]) => {
+      const percentage =
+        total
+          ? Math.round(
+              (count(
+                currentStatus
+              ) /
+                total) *
+                100
+            )
+          : 0;
 
-      const textElement = el(textId);
+      const textElement =
+        el(textId);
+
       const progressElement =
         el(progressId);
 
@@ -737,25 +1064,29 @@ function dashboard() {
   );
 
   const recentContainer =
-    el("recentApplications");
+    el(
+      "recentApplications"
+    );
 
   if (recentContainer) {
-    const recentApplications = [
-      ...applicationList,
-    ]
-      .sort(
-        (a, b) =>
-          new Date(b.date) -
-          new Date(a.date)
-      )
-      .slice(0, 5);
+    const recentApplications =
+      [...applicationList]
+        .sort(
+          (a, b) =>
+            new Date(b.date) -
+            new Date(a.date)
+        )
+        .slice(0, 5);
 
-    if (recentApplications.length) {
+    if (
+      recentApplications.length
+    ) {
       recentContainer.innerHTML =
         recentApplications
           .map(
             (application) => `
               <div class="recent-row">
+
                 <span class="company-avatar">
                   ${esc(
                     initials(
@@ -765,6 +1096,7 @@ function dashboard() {
                 </span>
 
                 <div class="recent-info">
+
                   <strong>
                     ${esc(
                       application.position
@@ -776,6 +1108,7 @@ function dashboard() {
                       application.company
                     )}
                   </span>
+
                 </div>
 
                 <span
@@ -793,6 +1126,7 @@ function dashboard() {
                     application.date
                   )}
                 </span>
+
               </div>
             `
           )
@@ -800,7 +1134,10 @@ function dashboard() {
     } else {
       recentContainer.innerHTML = `
         <div class="empty-state">
-          <div class="empty-icon">▤</div>
+
+          <div class="empty-icon">
+            ▤
+          </div>
 
           <h3>
             No applications yet
@@ -816,6 +1153,7 @@ function dashboard() {
           >
             Add Application
           </a>
+
         </div>
       `;
     }
@@ -829,33 +1167,46 @@ function dashboard() {
 ========================================= */
 
 function renderCharts() {
-  if (typeof Chart === "undefined") {
+  if (
+    typeof Chart ===
+    "undefined"
+  ) {
     return;
   }
 
-  const applicationList = apps();
+  const applicationList =
+    apps();
 
   /* -----------------------------------------
      APPLICATION TREND
   ----------------------------------------- */
 
   const trendCanvas =
-    el("applicationTrendChart");
+    el(
+      "applicationTrendChart"
+    );
 
   if (trendCanvas) {
     trendChart?.destroy();
 
-    const now = new Date();
+    const now =
+      new Date();
 
     const labels = [];
     const data = [];
 
-    for (let index = 5; index >= 0; index--) {
-      const monthDate = new Date(
-        now.getFullYear(),
-        now.getMonth() - index,
-        1
-      );
+    for (
+      let index = 5;
+      index >= 0;
+      index--
+    ) {
+      const monthDate =
+        new Date(
+          now.getFullYear(),
+          now.getMonth() -
+            index,
+          1
+        );
 
       labels.push(
         monthDate.toLocaleString(
@@ -871,7 +1222,7 @@ function renderCharts() {
           (application) => {
             const applicationDate =
               new Date(
-                application.date
+                `${application.date}T00:00:00`
               );
 
             return (
@@ -885,47 +1236,59 @@ function renderCharts() {
       );
     }
 
-    trendChart = new Chart(
-      trendCanvas,
-      {
-        type: "line",
+    trendChart =
+      new Chart(
+        trendCanvas,
+        {
+          type: "line",
 
-        data: {
-          labels,
+          data: {
+            labels,
 
-          datasets: [
-            {
-              label: "Applications",
-              data,
-              tension: 0.35,
-              fill: true,
-              borderWidth: 2,
-            },
-          ],
-        },
+            datasets: [
+              {
+                label:
+                  "Applications",
 
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
+                data,
 
-          plugins: {
-            legend: {
-              display: false,
-            },
+                tension:
+                  0.35,
+
+                fill: true,
+
+                borderWidth: 2,
+              },
+            ],
           },
 
-          scales: {
-            y: {
-              beginAtZero: true,
+          options: {
+            responsive: true,
 
-              ticks: {
-                precision: 0,
+            maintainAspectRatio:
+              false,
+
+            plugins: {
+              legend: {
+                display:
+                  false,
+              },
+            },
+
+            scales: {
+              y: {
+                beginAtZero:
+                  true,
+
+                ticks: {
+                  precision:
+                    0,
+                },
               },
             },
           },
-        },
-      }
-    );
+        }
+      );
   }
 
   /* -----------------------------------------
@@ -938,45 +1301,51 @@ function renderCharts() {
   if (statusCanvas) {
     statusChart?.destroy();
 
-    const counts = STATUSES.map(
-      (currentStatus) =>
-        applicationList.filter(
-          (application) =>
-            application.status ===
-            currentStatus
-        ).length
-    );
+    const counts =
+      STATUSES.map(
+        (currentStatus) =>
+          applicationList.filter(
+            (application) =>
+              application.status ===
+              currentStatus
+          ).length
+      );
 
-    statusChart = new Chart(
-      statusCanvas,
-      {
-        type: "doughnut",
+    statusChart =
+      new Chart(
+        statusCanvas,
+        {
+          type: "doughnut",
 
-        data: {
-          labels: STATUSES,
+          data: {
+            labels: STATUSES,
 
-          datasets: [
-            {
-              data: counts,
-              borderWidth: 0,
-            },
-          ],
-        },
+            datasets: [
+              {
+                data: counts,
 
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
+                borderWidth: 0,
+              },
+            ],
+          },
 
-          cutout: "68%",
+          options: {
+            responsive: true,
 
-          plugins: {
-            legend: {
-              position: "bottom",
+            maintainAspectRatio:
+              false,
+
+            cutout: "68%",
+
+            plugins: {
+              legend: {
+                position:
+                  "bottom",
+              },
             },
           },
-        },
-      }
-    );
+        }
+      );
 
     const summary =
       el("statusSummary");
@@ -984,15 +1353,22 @@ function renderCharts() {
     if (summary) {
       summary.innerHTML =
         STATUSES.map(
-          (currentStatus, index) => `
+          (
+            currentStatus,
+            index
+          ) => `
             <div class="status-summary-item">
+
               <span>
-                ${esc(currentStatus)}
+                ${esc(
+                  currentStatus
+                )}
               </span>
 
               <strong>
                 ${counts[index]}
               </strong>
+
             </div>
           `
         ).join("");
@@ -1005,37 +1381,43 @@ function renderCharts() {
 ========================================= */
 
 function renderTable() {
-  const tableBody = el(
-    "applicationsTableBody",
-    "applicationsTable"
-  );
+  const tableBody =
+    el(
+      "applicationsTableBody",
+      "applicationsTable"
+    );
 
   if (!tableBody) {
     return;
   }
 
-  let applicationList = apps();
+  let applicationList =
+    apps();
 
   const searchInput =
-    el("applicationSearch");
+    el(
+      "applicationSearch"
+    );
 
   const searchFromUrl =
     new URLSearchParams(
       location.search
     ).get("search") || "";
 
-  const searchQuery =
-    (
-      searchInput?.value ||
-      searchFromUrl
-    )
-      .toLowerCase()
-      .trim();
+  const searchQuery = (
+    searchInput?.value ||
+    searchFromUrl
+  )
+    .toLowerCase()
+    .trim();
 
   const statusFilter =
-    el("statusFilter")?.value || "";
+    el("statusFilter")
+      ?.value || "";
 
-  /* Search */
+  /* -----------------------------------------
+     Search
+  ----------------------------------------- */
 
   if (searchQuery) {
     applicationList =
@@ -1052,11 +1434,15 @@ function renderTable() {
           ]
             .join(" ")
             .toLowerCase()
-            .includes(searchQuery)
+            .includes(
+              searchQuery
+            )
       );
   }
 
-  /* Status filter */
+  /* -----------------------------------------
+     Status filter
+  ----------------------------------------- */
 
   if (statusFilter) {
     applicationList =
@@ -1067,7 +1453,9 @@ function renderTable() {
       );
   }
 
-  /* Sort newest first */
+  /* -----------------------------------------
+     Sort newest first
+  ----------------------------------------- */
 
   applicationList.sort(
     (a, b) =>
@@ -1076,20 +1464,28 @@ function renderTable() {
   );
 
   const emptyState =
-    el("applicationsEmpty");
+    el(
+      "applicationsEmpty"
+    );
 
   if (emptyState) {
     emptyState.classList.toggle(
       "hidden",
-      applicationList.length > 0
+      applicationList.length >
+        0
     );
   }
 
-  if (!applicationList.length) {
+  if (
+    !applicationList.length
+  ) {
     tableBody.innerHTML = `
       <tr>
+
         <td colspan="7">
+
           <div class="empty-state">
+
             <div class="empty-icon">
               ⌕
             </div>
@@ -1101,8 +1497,11 @@ function renderTable() {
             <p>
               Try changing your search or filter.
             </p>
+
           </div>
+
         </td>
+
       </tr>
     `;
 
@@ -1114,7 +1513,9 @@ function renderTable() {
       .map(
         (application) => `
           <tr>
+
             <td>
+
               <div class="table-company">
 
                 <span class="company-avatar">
@@ -1126,6 +1527,7 @@ function renderTable() {
                 </span>
 
                 <div>
+
                   <strong>
                     ${esc(
                       application.company
@@ -1137,9 +1539,11 @@ function renderTable() {
                       application.location
                     )}
                   </small>
+
                 </div>
 
               </div>
+
             </td>
 
             <td>
@@ -1156,11 +1560,13 @@ function renderTable() {
 
             <td>
               ${esc(
-                application.salary || "-"
+                application.salary ||
+                  "-"
               )}
             </td>
 
             <td>
+
               <span
                 class="status-badge ${statusClass(
                   application.status
@@ -1170,6 +1576,7 @@ function renderTable() {
                   application.status
                 )}
               </span>
+
             </td>
 
             <td>
@@ -1179,6 +1586,7 @@ function renderTable() {
             </td>
 
             <td>
+
               <div class="table-actions">
 
                 ${
@@ -1190,7 +1598,7 @@ function renderTable() {
                           application.url
                         )}"
                         target="_blank"
-                        rel="noopener"
+                        rel="noopener noreferrer"
                         aria-label="Open job link"
                         title="Open job link"
                       >
@@ -1224,7 +1632,9 @@ function renderTable() {
                 </button>
 
               </div>
+
             </td>
+
           </tr>
         `
       )
@@ -1236,10 +1646,11 @@ function renderTable() {
 ========================================= */
 
 function applicationsPage() {
-  const tableBody = el(
-    "applicationsTableBody",
-    "applicationsTable"
-  );
+  const tableBody =
+    el(
+      "applicationsTableBody",
+      "applicationsTable"
+    );
 
   if (!tableBody) {
     return;
@@ -1251,10 +1662,16 @@ function applicationsPage() {
     ).get("search");
 
   const searchInput =
-    el("applicationSearch");
+    el(
+      "applicationSearch"
+    );
 
-  if (searchInput && searchQuery) {
-    searchInput.value = searchQuery;
+  if (
+    searchInput &&
+    searchQuery
+  ) {
+    searchInput.value =
+      searchQuery;
   }
 
   renderTable();
@@ -1264,23 +1681,31 @@ function applicationsPage() {
     renderTable
   );
 
-  el("statusFilter")?.addEventListener(
+  el(
+    "statusFilter"
+  )?.addEventListener(
     "change",
     renderTable
   );
 
-  el("clearFilters")?.addEventListener(
+  el(
+    "clearFilters"
+  )?.addEventListener(
     "click",
     () => {
       if (searchInput) {
-        searchInput.value = "";
+        searchInput.value =
+          "";
       }
 
       const statusFilter =
-        el("statusFilter");
+        el(
+          "statusFilter"
+        );
 
       if (statusFilter) {
-        statusFilter.value = "";
+        statusFilter.value =
+          "";
       }
 
       history.replaceState(
@@ -1309,16 +1734,18 @@ function applicationsPage() {
         apps().find(
           (item) =>
             item.id ===
-            deleteButton.dataset.delete
+            deleteButton.dataset
+              .delete
         );
 
       if (!application) {
         return;
       }
 
-      const confirmed = confirm(
-        `Delete "${application.position}" at ${application.company}?`
-      );
+      const confirmed =
+        confirm(
+          `Delete "${application.position}" at ${application.company}?`
+        );
 
       if (!confirmed) {
         return;
@@ -1327,7 +1754,8 @@ function applicationsPage() {
       saveApps(
         apps().filter(
           (item) =>
-            item.id !== application.id
+            item.id !==
+            application.id
         )
       );
 
@@ -1346,7 +1774,8 @@ function applicationsPage() {
 ========================================= */
 
 function jobForm() {
-  const form = el("jobForm");
+  const form =
+    el("jobForm");
 
   if (!form) {
     return;
@@ -1361,7 +1790,8 @@ function jobForm() {
     idParam
       ? apps().find(
           (application) =>
-            application.id === idParam
+            application.id ===
+            idParam
         )
       : null;
 
@@ -1376,19 +1806,24 @@ function jobForm() {
 
     Object.entries(
       existingApplication
-    ).forEach(([key, value]) => {
-      const fieldName =
-        key === "date"
-          ? "applicationDate"
-          : key;
+    ).forEach(
+      ([key, value]) => {
+        const fieldName =
+          key === "date"
+            ? "applicationDate"
+            : key;
 
-      const field =
-        form.elements[fieldName];
+        const field =
+          form.elements[
+            fieldName
+          ];
 
-      if (field) {
-        field.value = value || "";
+        if (field) {
+          field.value =
+            value || "";
+        }
       }
-    });
+    );
 
     const submitButton =
       form.querySelector(
@@ -1401,7 +1836,8 @@ function jobForm() {
     }
   } else {
     const dateField =
-      form.elements.applicationDate;
+      form.elements
+        .applicationDate;
 
     if (dateField) {
       dateField.value =
@@ -1416,7 +1852,9 @@ function jobForm() {
     (event) => {
       event.preventDefault();
 
-      if (!form.reportValidity()) {
+      if (
+        !form.reportValidity()
+      ) {
         return;
       }
 
@@ -1425,25 +1863,39 @@ function jobForm() {
 
       const application =
         normalizeApp({
-          id: idParam || createId(),
+          id:
+            idParam ||
+            createId(),
 
           company:
-            formData.get("company"),
+            formData.get(
+              "company"
+            ),
 
           position:
-            formData.get("position"),
+            formData.get(
+              "position"
+            ),
 
           location:
-            formData.get("location"),
+            formData.get(
+              "location"
+            ),
 
           salary:
-            formData.get("salary"),
+            formData.get(
+              "salary"
+            ),
 
           jobType:
-            formData.get("jobType"),
+            formData.get(
+              "jobType"
+            ),
 
           status:
-            formData.get("status"),
+            formData.get(
+              "status"
+            ),
 
           date:
             formData.get(
@@ -1451,10 +1903,14 @@ function jobForm() {
             ),
 
           url:
-            formData.get("jobUrl"),
+            formData.get(
+              "jobUrl"
+            ),
 
           notes:
-            formData.get("notes"),
+            formData.get(
+              "notes"
+            ),
         });
 
       if (
@@ -1469,15 +1925,19 @@ function jobForm() {
         return;
       }
 
-      const applicationList = apps();
+      const applicationList =
+        apps();
 
       const existingIndex =
         applicationList.findIndex(
           (item) =>
-            item.id === application.id
+            item.id ===
+            application.id
         );
 
-      if (existingIndex >= 0) {
+      if (
+        existingIndex >= 0
+      ) {
         applicationList[
           existingIndex
         ] = application;
@@ -1487,7 +1947,9 @@ function jobForm() {
         );
       }
 
-      saveApps(applicationList);
+      saveApps(
+        applicationList
+      );
 
       toast(
         existingIndex >= 0
@@ -1508,7 +1970,8 @@ function jobForm() {
 ========================================= */
 
 function profilePage() {
-  const form = el("profileForm");
+  const form =
+    el("profileForm");
 
   if (!form) {
     return;
@@ -1517,6 +1980,10 @@ function profilePage() {
   const currentProfile =
     profile();
 
+  /* -----------------------------------------
+     Fill profile fields
+  ----------------------------------------- */
+
   [
     "name",
     "role",
@@ -1524,31 +1991,47 @@ function profilePage() {
     "phone",
     "location",
     "bio",
-  ].forEach((fieldName) => {
-    const field =
-      form.elements[fieldName];
+  ].forEach(
+    (fieldName) => {
+      const field =
+        form.elements[
+          fieldName
+        ];
 
-    if (field) {
-      field.value =
-        currentProfile[fieldName] || "";
+      if (field) {
+        field.value =
+          currentProfile[
+            fieldName
+          ] || "";
+      }
     }
-  });
+  );
 
   const preview =
     el("profilePreview");
 
+  const fallback =
+    el("profileFallback");
+
   const photoInput =
     el("profilePhoto");
 
-  if (preview) {
-    if (currentProfile.photo) {
-      preview.src =
-        currentProfile.photo;
-    }
-  }
+  /* -----------------------------------------
+     Initial photo render
+  ----------------------------------------- */
+
+  renderProfilePhoto();
+
+  /* -----------------------------------------
+     Local photo variable
+  ----------------------------------------- */
 
   let photo =
-    currentProfile.photo;
+    currentProfile.photo || "";
+
+  /* -----------------------------------------
+     Photo input
+  ----------------------------------------- */
 
   photoInput?.addEventListener(
     "change",
@@ -1560,7 +2043,12 @@ function profilePage() {
         return;
       }
 
+      /* ---------------------------------------
+         Validate file type
+      --------------------------------------- */
+
       if (
+        !file.type ||
         !file.type.startsWith(
           "image/"
         )
@@ -1570,58 +2058,198 @@ function profilePage() {
           "error"
         );
 
+        event.target.value =
+          "";
+
         return;
       }
 
-      if (
-        file.size >
-        2 * 1024 * 1024
-      ) {
+      /* ---------------------------------------
+         Validate file size
+      --------------------------------------- */
+
+      const maxSize =
+        2 * 1024 * 1024;
+
+      if (file.size > maxSize) {
         toast(
           "Image must be smaller than 2MB.",
           "error"
         );
 
+        event.target.value =
+          "";
+
         return;
       }
+
+      /* ---------------------------------------
+         FileReader
+      --------------------------------------- */
 
       const reader =
         new FileReader();
 
       reader.onload = () => {
-        photo = reader.result;
+        if (
+          typeof reader.result !==
+          "string"
+        ) {
+          toast(
+            "Unable to preview this image.",
+            "error"
+          );
+
+          return;
+        }
+
+        photo =
+          reader.result;
+
+        /* -------------------------------------
+           Immediate preview
+        ------------------------------------- */
 
         if (preview) {
-          preview.src = photo;
+          preview.onload = () => {
+            preview.style.display =
+              "block";
+
+            if (fallback) {
+              fallback.style.display =
+                "none";
+            }
+          };
+
+          preview.onerror = () => {
+            preview.removeAttribute(
+              "src"
+            );
+
+            preview.style.display =
+              "none";
+
+            if (fallback) {
+              fallback.textContent =
+                initials(
+                  form.elements
+                    .name?.value ||
+                    currentProfile.name
+                );
+
+              fallback.style.display =
+                "flex";
+            }
+
+            toast(
+              "Unable to display this image.",
+              "error"
+            );
+          };
+
+          preview.src =
+            photo;
+
+          preview.alt =
+            `${
+              form.elements.name?.value ||
+              currentProfile.name ||
+              "Profile"
+            } profile photo`;
+        } else if (fallback) {
+          fallback.style.display =
+            "none";
         }
+      };
+
+      reader.onerror = () => {
+        toast(
+          "Unable to read the selected image.",
+          "error"
+        );
       };
 
       reader.readAsDataURL(file);
     }
   );
 
+  /* -----------------------------------------
+     Update fallback initials while typing name
+  ----------------------------------------- */
+
+  const nameField =
+    form.elements.name;
+
+  nameField?.addEventListener(
+    "input",
+    () => {
+      const name =
+        nameField.value.trim() ||
+        "Job Seeker";
+
+      if (
+        fallback &&
+        (!photo ||
+          !preview ||
+          preview.style.display ===
+            "none")
+      ) {
+        fallback.textContent =
+          initials(name);
+      }
+    }
+  );
+
+  /* -----------------------------------------
+     Submit
+  ----------------------------------------- */
+
   form.addEventListener(
     "submit",
     (event) => {
       event.preventDefault();
 
-      if (!form.reportValidity()) {
+      if (
+        !form.reportValidity()
+      ) {
         return;
       }
 
       const formData =
         new FormData(form);
 
-      saveProfile({
-        name: formData.get("name"),
-        role: formData.get("role"),
-        email: formData.get("email"),
-        phone: formData.get("phone"),
+      const updatedProfile = {
+        name:
+          formData.get("name"),
+
+        role:
+          formData.get("role"),
+
+        email:
+          formData.get("email"),
+
+        phone:
+          formData.get("phone"),
+
         location:
-          formData.get("location"),
-        bio: formData.get("bio"),
+          formData.get(
+            "location"
+          ),
+
+        bio:
+          formData.get("bio"),
+
         photo,
-      });
+      };
+
+      const saved =
+        saveProfile(
+          updatedProfile
+        );
+
+      if (!saved) {
+        return;
+      }
 
       syncProfile();
 
@@ -1896,17 +2524,19 @@ function kanban() {
 ========================================= */
 
 function settings() {
-  const resetButton = el(
-    "resetData",
-    "resetDemoData"
-  );
+  const resetButton =
+    el(
+      "resetData",
+      "resetDemoData"
+    );
 
   resetButton?.addEventListener(
     "click",
     () => {
-      const confirmed = confirm(
-        "Reset all applications to demo data?"
-      );
+      const confirmed =
+        confirm(
+          "Reset all applications to demo data?"
+        );
 
       if (!confirmed) {
         return;
@@ -1933,17 +2563,19 @@ function settings() {
     }
   );
 
-  const clearButton = el(
-    "clearAllApplications",
-    "clearApplications"
-  );
+  const clearButton =
+    el(
+      "clearAllApplications",
+      "clearApplications"
+    );
 
   clearButton?.addEventListener(
     "click",
     () => {
-      const confirmed = confirm(
-        "Delete all applications? This cannot be undone."
-      );
+      const confirmed =
+        confirm(
+          "Delete all applications? This cannot be undone."
+        );
 
       if (!confirmed) {
         return;
@@ -1980,7 +2612,8 @@ function globalSearch() {
     ).get("search");
 
   if (query) {
-    input.value = query;
+    input.value =
+      query;
   }
 
   input.addEventListener(
@@ -2011,7 +2644,8 @@ function back() {
       "click",
       (event) => {
         if (
-          button.tagName === "A"
+          button.tagName ===
+          "A"
         ) {
           return;
         }
@@ -2039,8 +2673,10 @@ window.addEventListener(
   "storage",
   (event) => {
     if (
-      event.key === STORAGE_KEY ||
-      event.key === PROFILE_KEY
+      event.key ===
+        STORAGE_KEY ||
+      event.key ===
+        PROFILE_KEY
     ) {
       syncProfile();
       dashboard();
@@ -2049,10 +2685,12 @@ window.addEventListener(
     }
 
     if (
-      event.key === THEME_KEY
+      event.key ===
+      THEME_KEY
     ) {
       const theme =
-        event.newValue === "dark"
+        event.newValue ===
+        "dark"
           ? "dark"
           : "light";
 
@@ -2061,7 +2699,9 @@ window.addEventListener(
         theme === "dark"
       );
 
-      updateThemeButtons(theme);
+      updateThemeButtons(
+        theme
+      );
 
       if (
         typeof Chart !==
@@ -2100,7 +2740,9 @@ window.addEventListener(
 document.addEventListener(
   "DOMContentLoaded",
   () => {
-    /* Create default profile */
+    /* ---------------------------------------
+       Create default profile
+    --------------------------------------- */
 
     if (
       !localStorage.getItem(
@@ -2112,7 +2754,9 @@ document.addEventListener(
       );
     }
 
-    /* Global setup */
+    /* ---------------------------------------
+       Global setup
+    --------------------------------------- */
 
     setupTheme();
     mobile();
@@ -2120,11 +2764,15 @@ document.addEventListener(
     back();
     globalSearch();
 
-    /* Page sync */
+    /* ---------------------------------------
+       Profile sync
+    --------------------------------------- */
 
     syncProfile();
 
-    /* Page modules */
+    /* ---------------------------------------
+       Page modules
+    --------------------------------------- */
 
     dashboard();
     applicationsPage();
