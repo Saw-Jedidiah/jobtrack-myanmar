@@ -818,6 +818,16 @@ body.dark .status-badge.rejected {
 .profile-photo-wrapper {
   margin-top: -45px;
 }
+.profile-photo-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 32px;
+    font-weight: 800;
+}
 
 .profile-photo {
   width: 90px;
