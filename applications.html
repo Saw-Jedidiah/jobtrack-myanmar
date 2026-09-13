@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>Applications — JobTrack Myanmar</title>
+
+    <!-- Google Font -->
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    >
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- ==================== SIDEBAR ==================== -->
+        <aside
+            class="sidebar"
+            id="sidebar"
+        >
+
+            <div class="brand">
+                <span class="brand-logo">JT</span>
+                <span>JobTrack Myanmar</span>
+            </div>
+
+            <nav class="nav">
+
+                <a
+                    class="nav-item"
+                    href="index.html"
+                >
+                    ⌂ Dashboard
+                </a>
+
+                <a
+                    class="nav-item"
+                    href="applications.html"
+                >
+                    ▤ Applications
+                </a>
+
+                <a
+                    class="nav-item"
+                    href="kanban.html"
+                >
+                    ▥ Kanban Board
+                </a>
+
+                <a
+                    class="nav-item"
+                    href="add-job.html"
+                >
+                    ＋ Add Job
+                </a>
+
+                <div class="nav-label">
+                    ACCOUNT
+                </div>
+
+                <a
+                    class="nav-item"
+                    href="profile.html"
+                >
+                    ◯ Profile
+                </a>
+
+                <a
+                    class="nav-item"
+                    href="settings.html"
+                >
+                    ⚙ Settings
+                </a>
+
+            </nav>
+
+        </aside>
+
+
+        <!-- Mobile Overlay -->
+        <div
+            class="mobile-overlay"
+            id="mobileOverlay"
+        ></div>
+
+
+        <!-- ==================== MAIN ==================== -->
+        <main class="main">
+
+            <!-- ==================== TOPBAR ==================== -->
+            <header class="topbar">
+
+                <div class="topbar-left">
+
+                    <button
+                        class="mobile-menu"
+                        id="mobileMenu"
+                        type="button"
+                        aria-label="Open menu"
+                    >
+                        ☰
+                    </button>
+
+                    <div>
+                        <h1>Applications</h1>
+
+                        <p>
+                            Manage your job applications
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="topbar-actions">
+
+                    <!-- Global Search -->
+                    <div class="topbar-search">
+
+                        <input
+                            id="globalSearch"
+                            type="search"
+                            placeholder="Search applications…"
+                            aria-label="Search applications"
+                        >
+
+                    </div>
+
+
+                    <!-- Theme Toggle -->
+                    <button
+                        class="theme-toggle"
+                        id="themeToggle"
+                        type="button"
+                        aria-label="Toggle theme"
+                    >
+                        ☾
+                    </button>
+
+
+                    <!-- User Avatar -->
+                    <div
+                        class="avatar avatar-sm"
+                        id="headerAvatar"
+                    ></div>
+
+                </div>
+
+            </header>
+
+
+            <!-- ==================== PAGE ==================== -->
+            <section class="page">
+
+                <!-- Page Header -->
+                <div class="page-header">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            JOB SEARCH
+                        </p>
+
+                        <h2>
+                            Applications
+                        </h2>
+
+                        <p>
+                            Keep your job search organized.
+                        </p>
+
+                    </div>
+
+
+                    <a
+                        class="btn btn-primary"
+                        href="add-job.html"
+                    >
+                        ＋ Add Application
+                    </a>
+
+                </div>
+
+
+                <!-- ==================== APPLICATIONS CARD ==================== -->
+                <div class="card">
+
+                    <!-- Filters -->
+                    <div class="filter-bar">
+
+                        <!-- Search -->
+                        <div class="filter-search">
+
+                            <input
+                                id="applicationSearch"
+                                type="search"
+                                placeholder="Search company, position, location…"
+                                aria-label="Search applications"
+                            >
+
+                        </div>
+
+
+                        <!-- Status Filter -->
+                        <select
+                            id="statusFilter"
+                            aria-label="Filter by status"
+                        >
+
+                            <option value="">
+                                All statuses
+                            </option>
+
+                            <option value="Applied">
+                                Applied
+                            </option>
+
+                            <option value="Screening">
+                                Screening
+                            </option>
+
+                            <option value="Interview">
+                                Interview
+                            </option>
+
+                            <option value="Test">
+                                Test
+                            </option>
+
+                            <option value="Offer">
+                                Offer
+                            </option>
+
+                            <option value="Rejected">
+                                Rejected
+                            </option>
+
+                        </select>
+
+
+                        <!-- Clear Filters -->
+                        <button
+                            class="btn btn-secondary"
+                            id="clearFilters"
+                            type="button"
+                        >
+                            Clear
+                        </button>
+
+                    </div>
+
+
+                    <!-- ==================== TABLE ==================== -->
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>Company</th>
+                                    <th>Position</th>
+                                    <th>Type</th>
+                                    <th>Salary</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="applicationsTable">
+                                <!-- Applications will be rendered by app.js -->
+                            </tbody>
+
+                        </table>
+
+
+                        <!-- Empty State -->
+                        <div
+                            id="applicationsEmpty"
+                            class="empty-state hidden"
+                        >
+                            No applications found.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- Toast Notification -->
+    <div
+        class="toast"
+        id="toast"
+        role="status"
+        aria-live="polite"
+    ></div>
+
+
+    <!-- Main JavaScript -->
+    <script src="js/app.js"></script>
+
+</body>
+
+</html>

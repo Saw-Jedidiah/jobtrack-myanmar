@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>Add Job — JobTrack Myanmar</title>
+
+    <!-- Google Font -->
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    >
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- ==================== SIDEBAR ==================== -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="brand">
+                <span class="brand-logo">JT</span>
+                <span>JobTrack Myanmar</span>
+            </div>
+
+            <nav class="nav">
+
+                <a class="nav-item" href="index.html">
+                    ⌂ Dashboard
+                </a>
+
+                <a class="nav-item" href="applications.html">
+                    ▤ Applications
+                </a>
+
+                <a class="nav-item" href="kanban.html">
+                    ▥ Kanban Board
+                </a>
+
+                <a class="nav-item" href="add-job.html">
+                    ＋ Add Job
+                </a>
+
+                <div class="nav-label">
+                    ACCOUNT
+                </div>
+
+                <a class="nav-item" href="profile.html">
+                    ◯ Profile
+                </a>
+
+                <a class="nav-item" href="settings.html">
+                    ⚙ Settings
+                </a>
+
+            </nav>
+
+        </aside>
+
+
+        <!-- Mobile Overlay -->
+        <div
+            class="mobile-overlay"
+            id="mobileOverlay"
+        ></div>
+
+
+        <!-- ==================== MAIN ==================== -->
+        <main class="main">
+
+            <!-- ==================== TOPBAR ==================== -->
+            <header class="topbar">
+
+                <div class="topbar-left">
+
+                    <button
+                        class="mobile-menu"
+                        id="mobileMenu"
+                        type="button"
+                        aria-label="Open menu"
+                    >
+                        ☰
+                    </button>
+
+                    <div>
+                        <h1>Add Job</h1>
+                        <p>Save a new opportunity</p>
+                    </div>
+
+                </div>
+
+
+                <div class="topbar-actions">
+
+                    <!-- Theme Toggle -->
+                    <button
+                        class="theme-toggle"
+                        id="themeToggle"
+                        type="button"
+                        aria-label="Toggle theme"
+                    >
+                        ☾
+                    </button>
+
+                    <!-- User Avatar -->
+                    <div
+                        class="avatar avatar-sm"
+                        id="headerAvatar"
+                    ></div>
+
+                </div>
+
+            </header>
+
+
+            <!-- ==================== PAGE ==================== -->
+            <section class="page narrow-page">
+
+                <!-- Page Header -->
+                <div class="page-header">
+
+                    <div>
+                        <p class="eyebrow">
+                            JOB SEARCH
+                        </p>
+
+                        <h2 id="formTitle">
+                            Add Application
+                        </h2>
+                    </div>
+
+                    <a
+                        class="btn btn-secondary back-button"
+                        href="applications.html"
+                    >
+                        ← Back
+                    </a>
+
+                </div>
+
+
+                <!-- ==================== FORM ==================== -->
+                <form
+                    id="jobForm"
+                    class="card form-card"
+                >
+
+                    <div class="form-grid">
+
+                        <!-- Company -->
+                        <div class="form-group">
+
+                            <label for="company">
+                                Company *
+                            </label>
+
+                            <input
+                                id="company"
+                                name="company"
+                                type="text"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Position -->
+                        <div class="form-group">
+
+                            <label for="position">
+                                Position *
+                            </label>
+
+                            <input
+                                id="position"
+                                name="position"
+                                type="text"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Location -->
+                        <div class="form-group">
+
+                            <label for="location">
+                                Location
+                            </label>
+
+                            <input
+                                id="location"
+                                name="location"
+                                type="text"
+                                placeholder="e.g. Yangon, Myanmar"
+                            >
+
+                        </div>
+
+
+                        <!-- Salary -->
+                        <div class="form-group">
+
+                            <label for="salary">
+                                Salary
+                            </label>
+
+                            <input
+                                id="salary"
+                                name="salary"
+                                type="text"
+                                placeholder="e.g. 1,500,000 MMK"
+                            >
+
+                        </div>
+
+
+                        <!-- Job Type -->
+                        <div class="form-group">
+
+                            <label for="jobType">
+                                Job Type
+                            </label>
+
+                            <select
+                                id="jobType"
+                                name="jobType"
+                            >
+                                <option value="Full-time">
+                                    Full-time
+                                </option>
+
+                                <option value="Part-time">
+                                    Part-time
+                                </option>
+
+                                <option value="Contract">
+                                    Contract
+                                </option>
+
+                                <option value="Freelance">
+                                    Freelance
+                                </option>
+
+                                <option value="Internship">
+                                    Internship
+                                </option>
+                            </select>
+
+                        </div>
+
+
+                        <!-- Status -->
+                        <div class="form-group">
+
+                            <label for="status">
+                                Status
+                            </label>
+
+                            <select
+                                id="status"
+                                name="status"
+                            >
+                                <option value="Applied">
+                                    Applied
+                                </option>
+
+                                <option value="Screening">
+                                    Screening
+                                </option>
+
+                                <option value="Interview">
+                                    Interview
+                                </option>
+
+                                <option value="Test">
+                                    Test
+                                </option>
+
+                                <option value="Offer">
+                                    Offer
+                                </option>
+
+                                <option value="Rejected">
+                                    Rejected
+                                </option>
+                            </select>
+
+                        </div>
+
+
+                        <!-- Application Date -->
+                        <div class="form-group">
+
+                            <label for="applicationDate">
+                                Application Date
+                            </label>
+
+                            <input
+                                id="applicationDate"
+                                name="applicationDate"
+                                type="date"
+                            >
+
+                        </div>
+
+
+                        <!-- Job URL -->
+                        <div class="form-group">
+
+                            <label for="jobUrl">
+                                Job URL
+                            </label>
+
+                            <input
+                                id="jobUrl"
+                                name="jobUrl"
+                                type="url"
+                                placeholder="https://..."
+                            >
+
+                        </div>
+
+
+                        <!-- Notes -->
+                        <div class="form-group full-width">
+
+                            <label for="notes">
+                                Notes
+                            </label>
+
+                            <textarea
+                                id="notes"
+                                name="notes"
+                                placeholder="Interview notes, follow-up date, recruiter contact…"
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+
+                        <a
+                            class="btn btn-secondary"
+                            href="applications.html"
+                        >
+                            Cancel
+                        </a>
+
+                        <button
+                            class="btn btn-primary"
+                            type="submit"
+                        >
+                            Save Application
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- Toast -->
+    <div
+        class="toast"
+        id="toast"
+    ></div>
+
+
+    <!-- Main JavaScript -->
+    <script src="js/app.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>Settings — JobTrack Myanmar</title>
+
+    <!-- Google Fonts -->
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    >
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- ==================== SIDEBAR ==================== -->
+        <aside
+            class="sidebar"
+            id="sidebar"
+        >
+
+            <!-- Brand -->
+            <div class="brand">
+
+                <span class="brand-logo">
+                    JT
+                </span>
+
+                <span>
+                    JobTrack Myanmar
+                </span>
+
+            </div>
+
+
+            <!-- Navigation -->
+            <nav class="nav">
+
+                <a
+                    class="nav-item"
+                    href="index.html"
+                >
+                    <span class="nav-icon">
+                        ⌂
+                    </span>
+
+                    Dashboard
+                </a>
+
+
+                <a
+                    class="nav-item"
+                    href="applications.html"
+                >
+                    <span class="nav-icon">
+                        ▤
+                    </span>
+
+                    Applications
+                </a>
+
+
+                <a
+                    class="nav-item"
+                    href="kanban.html"
+                >
+                    <span class="nav-icon">
+                        ▥
+                    </span>
+
+                    Kanban Board
+                </a>
+
+
+                <a
+                    class="nav-item"
+                    href="add-job.html"
+                >
+                    <span class="nav-icon">
+                        ＋
+                    </span>
+
+                    Add Job
+                </a>
+
+
+                <!-- Account -->
+                <div class="nav-label">
+                    ACCOUNT
+                </div>
+
+
+                <a
+                    class="nav-item"
+                    href="profile.html"
+                >
+                    <span class="nav-icon">
+                        ◯
+                    </span>
+
+                    Profile
+                </a>
+
+
+                <a
+                    class="nav-item"
+                    href="settings.html"
+                >
+                    <span class="nav-icon">
+                        ⚙
+                    </span>
+
+                    Settings
+                </a>
+
+            </nav>
+
+        </aside>
+
+
+        <!-- Mobile Overlay -->
+        <div
+            class="mobile-overlay"
+            id="mobileOverlay"
+        ></div>
+
+
+        <!-- ==================== MAIN ==================== -->
+        <main class="main">
+
+            <!-- ==================== TOPBAR ==================== -->
+            <header class="topbar">
+
+                <div class="topbar-left">
+
+                    <!-- Mobile Menu -->
+                    <button
+                        class="mobile-menu"
+                        id="mobileMenu"
+                        type="button"
+                        aria-label="Open menu"
+                    >
+                        ☰
+                    </button>
+
+
+                    <div>
+
+                        <h1>
+                            Settings
+                        </h1>
+
+                        <p>
+                            Preferences and data controls
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Topbar Actions -->
+                <div class="topbar-actions">
+
+                    <!-- Theme Toggle -->
+                    <button
+                        class="theme-toggle"
+                        id="themeToggle"
+                        type="button"
+                        aria-label="Toggle theme"
+                    >
+                        ☾
+                    </button>
+
+
+                    <!-- User Avatar -->
+                    <div
+                        class="avatar avatar-sm"
+                        id="headerAvatar"
+                    ></div>
+
+                </div>
+
+            </header>
+
+
+            <!-- ==================== PAGE ==================== -->
+            <section class="page narrow-page">
+
+                <!-- Page Header -->
+                <div class="page-header">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            PREFERENCES
+                        </p>
+
+                        <h2>
+                            Settings
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================== SETTINGS ==================== -->
+                <div class="settings-list">
+
+                    <!-- ==================== APPEARANCE ==================== -->
+                    <div class="card setting-item">
+
+                        <div class="setting-info">
+
+                            <div class="setting-icon">
+                                ☾
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Appearance
+                                </h3>
+
+                                <p>
+                                    Switch between light and dark mode
+                                    using the button in the header.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Secondary Theme Toggle -->
+                        <button
+                            class="theme-toggle"
+                            id="settingsThemeToggle"
+                            type="button"
+                            aria-label="Toggle theme"
+                        >
+                            ☾
+                        </button>
+
+                    </div>
+
+
+                    <!-- ==================== RESTORE DEMO DATA ==================== -->
+                    <div class="card setting-item danger-setting">
+
+                        <div class="setting-info">
+
+                            <div class="setting-icon">
+                                ↻
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Restore demo data
+                                </h3>
+
+                                <p>
+                                    Replace your current applications
+                                    with the sample JobTrack data.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            class="btn btn-secondary"
+                            id="resetData"
+                            type="button"
+                        >
+                            Restore
+                        </button>
+
+                    </div>
+
+
+                    <!-- ==================== DELETE ALL APPLICATIONS ==================== -->
+                    <div class="card setting-item danger-setting">
+
+                        <div class="setting-info">
+
+                            <div class="setting-icon">
+                                ×
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Delete all applications
+                                </h3>
+
+                                <p>
+                                    Permanently remove all saved
+                                    applications from this browser.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            class="btn btn-danger"
+                            id="clearAllApplications"
+                            type="button"
+                        >
+                            Delete all
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- ==================== TOAST ==================== -->
+    <div
+        class="toast"
+        id="toast"
+        role="status"
+        aria-live="polite"
+    ></div>
+
+
+    <!-- Main JavaScript -->
+    <script src="js/app.js"></script>
+
+</body>
+
+</html>

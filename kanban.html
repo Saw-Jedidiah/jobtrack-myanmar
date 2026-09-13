@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>Kanban Board — JobTrack Myanmar</title>
+
+    <!-- Google Fonts -->
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    >
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- ==================== SIDEBAR ==================== -->
+        <aside
+            class="sidebar"
+            id="sidebar"
+        >
+
+            <!-- Brand -->
+            <div class="brand">
+
+                <span class="brand-logo">
+                    JT
+                </span>
+
+                <span>
+                    JobTrack Myanmar
+                </span>
+
+            </div>
+
+
+            <!-- Navigation -->
+            <nav class="nav">
+
+                <a
+                    class="nav-item"
+                    href="index.html"
+                >
+                    <span class="nav-icon">
+                        ⌂
+                    </span>
+
+                    Dashboard
+                </a>
+
+
+                <a
+                    class="nav-item"
+                    href="applications.html"
+                >
+                    <span class="nav-icon">
+                        ▤
+                    </span>
+
+                    Applications
+                </a>
+
+
+                <a
+                    class="nav-item"
+                    href="kanban.html"
+                >
+                    <span class="nav-icon">
+                        ▥
+                    </span>
+
+                    Kanban Board
+                </a>
+
+
+                <a
+                    class="nav-item"
+                    href="add-job.html"
+                >
+                    <span class="nav-icon">
+                        ＋
+                    </span>
+
+                    Add Job
+                </a>
+
+
+                <!-- Account -->
+                <div class="nav-label">
+                    ACCOUNT
+                </div>
+
+
+                <a
+                    class="nav-item"
+                    href="profile.html"
+                >
+                    <span class="nav-icon">
+                        ◯
+                    </span>
+
+                    Profile
+                </a>
+
+
+                <a
+                    class="nav-item"
+                    href="settings.html"
+                >
+                    <span class="nav-icon">
+                        ⚙
+                    </span>
+
+                    Settings
+                </a>
+
+            </nav>
+
+        </aside>
+
+
+        <!-- Mobile Overlay -->
+        <div
+            class="mobile-overlay"
+            id="mobileOverlay"
+        ></div>
+
+
+        <!-- ==================== MAIN ==================== -->
+        <main class="main">
+
+            <!-- ==================== TOPBAR ==================== -->
+            <header class="topbar">
+
+                <div class="topbar-left">
+
+                    <!-- Mobile Menu -->
+                    <button
+                        class="mobile-menu"
+                        id="mobileMenu"
+                        type="button"
+                        aria-label="Open menu"
+                    >
+                        ☰
+                    </button>
+
+
+                    <div>
+
+                        <h1>
+                            Kanban Board
+                        </h1>
+
+                        <p>
+                            Move applications through your hiring pipeline
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Topbar Actions -->
+                <div class="topbar-actions">
+
+                    <!-- Theme Toggle -->
+                    <button
+                        class="theme-toggle"
+                        id="themeToggle"
+                        type="button"
+                        aria-label="Toggle theme"
+                    >
+                        ☾
+                    </button>
+
+
+                    <!-- Add Application -->
+                    <a
+                        class="btn btn-primary"
+                        href="add-job.html"
+                    >
+                        ＋ Add Application
+                    </a>
+
+
+                    <!-- User Avatar -->
+                    <div
+                        class="avatar avatar-sm"
+                        id="headerAvatar"
+                    ></div>
+
+                </div>
+
+            </header>
+
+
+            <!-- ==================== PAGE ==================== -->
+            <section class="page">
+
+                <!-- Page Header -->
+                <div class="page-header">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            PIPELINE
+                        </p>
+
+                        <h2>
+                            Kanban Board
+                        </h2>
+
+                        <p>
+                            Drag an application to update its status.
+                        </p>
+
+                    </div>
+
+
+                    <a
+                        class="btn btn-secondary"
+                        href="applications.html"
+                    >
+                        Table View
+                    </a>
+
+                </div>
+
+
+                <!-- ==================== KANBAN BOARD ==================== -->
+                <div class="kanban-wrapper">
+
+                    <!-- Applied -->
+                    <section class="kanban-column">
+
+                        <div class="kanban-column-header">
+
+                            <h3>
+                                Applied
+                            </h3>
+
+                            <span class="kanban-count">
+                                0
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="kanban-list"
+                            data-status="Applied"
+                        ></div>
+
+                    </section>
+
+
+                    <!-- Screening -->
+                    <section class="kanban-column">
+
+                        <div class="kanban-column-header">
+
+                            <h3>
+                                Screening
+                            </h3>
+
+                            <span class="kanban-count">
+                                0
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="kanban-list"
+                            data-status="Screening"
+                        ></div>
+
+                    </section>
+
+
+                    <!-- Interview -->
+                    <section class="kanban-column">
+
+                        <div class="kanban-column-header">
+
+                            <h3>
+                                Interview
+                            </h3>
+
+                            <span class="kanban-count">
+                                0
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="kanban-list"
+                            data-status="Interview"
+                        ></div>
+
+                    </section>
+
+
+                    <!-- Test -->
+                    <section class="kanban-column">
+
+                        <div class="kanban-column-header">
+
+                            <h3>
+                                Test
+                            </h3>
+
+                            <span class="kanban-count">
+                                0
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="kanban-list"
+                            data-status="Test"
+                        ></div>
+
+                    </section>
+
+
+                    <!-- Offer -->
+                    <section class="kanban-column">
+
+                        <div class="kanban-column-header">
+
+                            <h3>
+                                Offer
+                            </h3>
+
+                            <span class="kanban-count">
+                                0
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="kanban-list"
+                            data-status="Offer"
+                        ></div>
+
+                    </section>
+
+
+                    <!-- Rejected -->
+                    <section class="kanban-column">
+
+                        <div class="kanban-column-header">
+
+                            <h3>
+                                Rejected
+                            </h3>
+
+                            <span class="kanban-count">
+                                0
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="kanban-list"
+                            data-status="Rejected"
+                        ></div>
+
+                    </section>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- ==================== TOAST ==================== -->
+    <div
+        class="toast"
+        id="toast"
+        role="status"
+        aria-live="polite"
+    ></div>
+
+
+    <!-- Main JavaScript -->
+    <script src="js/app.js"></script>
+
+</body>
+
+</html>

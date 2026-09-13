@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <meta
+        name="description"
+        content="JobTrack Myanmar - Job Application Tracker"
+    >
+
+    <title>Dashboard — JobTrack Myanmar</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    >
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- ==================== SIDEBAR ==================== -->
+        <aside
+            class="sidebar"
+            id="sidebar"
+        >
+
+            <!-- Brand -->
+            <div class="brand">
+
+                <span class="brand-logo">
+                    JT
+                </span>
+
+                <span>
+                    JobTrack Myanmar
+                </span>
+
+            </div>
+
+
+            <!-- Navigation -->
+            <nav class="nav">
+
+                <a
+                    class="nav-item"
+                    href="index.html"
+                >
+                    <span class="nav-icon">
+                        ⌂
+                    </span>
+
+                    Dashboard
+                </a>
+
+
+                <a
+                    class="nav-item"
+                    href="applications.html"
+                >
+                    <span class="nav-icon">
+                        ▤
+                    </span>
+
+                    Applications
+                </a>
+
+
+                <a
+                    class="nav-item"
+                    href="kanban.html"
+                >
+                    <span class="nav-icon">
+                        ▥
+                    </span>
+
+                    Kanban Board
+                </a>
+
+
+                <a
+                    class="nav-item"
+                    href="add-job.html"
+                >
+                    <span class="nav-icon">
+                        ＋
+                    </span>
+
+                    Add Job
+                </a>
+
+
+                <!-- Account -->
+                <div class="nav-label">
+                    ACCOUNT
+                </div>
+
+
+                <a
+                    class="nav-item"
+                    href="profile.html"
+                >
+                    <span class="nav-icon">
+                        ◯
+                    </span>
+
+                    Profile
+                </a>
+
+
+                <a
+                    class="nav-item"
+                    href="settings.html"
+                >
+                    <span class="nav-icon">
+                        ⚙
+                    </span>
+
+                    Settings
+                </a>
+
+            </nav>
+
+
+            <!-- Sidebar Bottom -->
+            <div class="sidebar-bottom">
+
+                <div class="sidebar-tip">
+                    Keep every application, interview and
+                    follow-up in one place.
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- ==================== MOBILE OVERLAY ==================== -->
+        <div
+            class="mobile-overlay"
+            id="sidebarOverlay"
+        ></div>
+
+
+        <!-- ==================== MAIN ==================== -->
+        <main class="main">
+
+            <!-- ==================== TOPBAR ==================== -->
+            <header class="topbar">
+
+                <div class="topbar-left">
+
+                    <!-- Mobile Menu -->
+                    <button
+                        class="mobile-menu"
+                        id="mobileMenu"
+                        type="button"
+                        aria-label="Open menu"
+                    >
+                        ☰
+                    </button>
+
+
+                    <div>
+
+                        <h1>
+                            Dashboard
+                        </h1>
+
+                        <p>
+                            Overview of your job search
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Topbar Actions -->
+                <div class="topbar-actions">
+
+                    <!-- Theme Toggle -->
+                    <button
+                        class="theme-toggle"
+                        id="themeToggle"
+                        type="button"
+                        aria-label="Toggle theme"
+                    >
+                        ☾
+                    </button>
+
+
+                    <!-- Add Application -->
+                    <a
+                        class="btn btn-primary"
+                        href="add-job.html"
+                    >
+                        ＋ Add Application
+                    </a>
+
+
+                    <!-- Profile -->
+                    <div class="topbar-profile">
+
+                        <div
+                            class="avatar avatar-sm"
+                            id="topbarAvatar"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- ==================== PAGE ==================== -->
+            <section class="page">
+
+                <!-- ==================== WELCOME ==================== -->
+                <div class="dashboard-welcome card">
+
+                    <h2>
+                        Welcome back,
+                        <span id="dashboardUserName">
+                            Job Seeker
+                        </span>
+                        👋
+                    </h2>
+
+                    <p>
+                        Track your applications and stay organized.
+                    </p>
+
+                </div>
+
+
+                <!-- ==================== STATISTICS ==================== -->
+                <div class="stats-grid">
+
+                    <!-- Total Applications -->
+                    <div class="card stat-card">
+
+                        <div class="label">
+                            Total Applications
+                        </div>
+
+                        <div
+                            class="value"
+                            id="totalApplications"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+
+                    <!-- Interviews -->
+                    <div class="card stat-card">
+
+                        <div class="label">
+                            Interviews
+                        </div>
+
+                        <div
+                            class="value"
+                            id="interviewCount"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+
+                    <!-- Tests -->
+                    <div class="card stat-card">
+
+                        <div class="label">
+                            Tests
+                        </div>
+
+                        <div
+                            class="value"
+                            id="testCount"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+
+                    <!-- Offers -->
+                    <div class="card stat-card">
+
+                        <div class="label">
+                            Offers
+                        </div>
+
+                        <div
+                            class="value"
+                            id="offerCount"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================== ANALYTICS ==================== -->
+                <div class="analytics-grid">
+
+                    <!-- Application Activity -->
+                    <div class="card chart-card">
+
+                        <div class="card-title">
+
+                            <h3>
+                                Application Activity
+                            </h3>
+
+                        </div>
+
+
+                        <div class="chart-wrap">
+
+                            <canvas
+                                id="applicationTrendChart"
+                            ></canvas>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Application Status -->
+                    <div class="card chart-card">
+
+                        <div class="card-title">
+
+                            <h3>
+                                Application Status
+                            </h3>
+
+                        </div>
+
+
+                        <div class="chart-wrap">
+
+                            <canvas
+                                id="statusChart"
+                            ></canvas>
+
+                        </div>
+
+
+                        <div
+                            class="status-summary"
+                            id="statusSummary"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================== PERFORMANCE ==================== -->
+                <div class="performance-grid">
+
+                    <!-- Interview Rate -->
+                    <div class="card performance-card">
+
+                        <div class="performance-top">
+
+                            <span>
+                                Interview Rate
+                            </span>
+
+                            <strong id="interviewRate">
+                                0%
+                            </strong>
+
+                        </div>
+
+
+                        <div class="progress">
+
+                            <div
+                                class="progress-bar"
+                                id="interviewProgress"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Test Rate -->
+                    <div class="card performance-card">
+
+                        <div class="performance-top">
+
+                            <span>
+                                Test Rate
+                            </span>
+
+                            <strong id="testRate">
+                                0%
+                            </strong>
+
+                        </div>
+
+
+                        <div class="progress">
+
+                            <div
+                                class="progress-bar"
+                                id="testProgress"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Offer Rate -->
+                    <div class="card performance-card">
+
+                        <div class="performance-top">
+
+                            <span>
+                                Offer Rate
+                            </span>
+
+                            <strong id="offerRate">
+                                0%
+                            </strong>
+
+                        </div>
+
+
+                        <div class="progress">
+
+                            <div
+                                class="progress-bar"
+                                id="offerProgress"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================== RECENT APPLICATIONS ==================== -->
+                <div class="card recent-card">
+
+                    <div class="card-title">
+
+                        <h3>
+                            Recent Applications
+                        </h3>
+
+
+                        <a
+                            class="btn btn-secondary"
+                            href="applications.html"
+                        >
+                            View All
+                        </a>
+
+                    </div>
+
+
+                    <div
+                        class="recent-list"
+                        id="recentApplications"
+                    ></div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- ==================== TOAST ==================== -->
+    <div
+        class="toast"
+        id="toast"
+        role="status"
+        aria-live="polite"
+    ></div>
+
+
+    <!-- Main JavaScript -->
+    <script src="js/app.js"></script>
+
+</body>
+
+</html>
