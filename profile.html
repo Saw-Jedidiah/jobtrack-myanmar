@@ -2,11 +2,16 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
 
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1"
+    >
+
+    <meta
+        name="description"
+        content="JobTrack Myanmar - User Profile"
     >
 
     <title>Profile — JobTrack Myanmar</title>
@@ -18,7 +23,10 @@
     >
 
     <!-- Main CSS -->
-    <link rel="stylesheet" href="css/style.css">
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
 </head>
 
 <body>
@@ -31,7 +39,6 @@
             id="sidebar"
         >
 
-            <!-- Brand -->
             <div class="brand">
 
                 <span class="brand-logo">
@@ -45,17 +52,13 @@
             </div>
 
 
-            <!-- Navigation -->
             <nav class="nav">
 
                 <a
                     class="nav-item"
                     href="index.html"
                 >
-                    <span class="nav-icon">
-                        ⌂
-                    </span>
-
+                    <span class="nav-icon">⌂</span>
                     Dashboard
                 </a>
 
@@ -64,10 +67,7 @@
                     class="nav-item"
                     href="applications.html"
                 >
-                    <span class="nav-icon">
-                        ▤
-                    </span>
-
+                    <span class="nav-icon">▤</span>
                     Applications
                 </a>
 
@@ -76,10 +76,7 @@
                     class="nav-item"
                     href="kanban.html"
                 >
-                    <span class="nav-icon">
-                        ▥
-                    </span>
-
+                    <span class="nav-icon">▥</span>
                     Kanban Board
                 </a>
 
@@ -88,15 +85,11 @@
                     class="nav-item"
                     href="add-job.html"
                 >
-                    <span class="nav-icon">
-                        ＋
-                    </span>
-
+                    <span class="nav-icon">＋</span>
                     Add Job
                 </a>
 
 
-                <!-- Account -->
                 <div class="nav-label">
                     ACCOUNT
                 </div>
@@ -106,10 +99,7 @@
                     class="nav-item"
                     href="profile.html"
                 >
-                    <span class="nav-icon">
-                        ◯
-                    </span>
-
+                    <span class="nav-icon">◯</span>
                     Profile
                 </a>
 
@@ -118,10 +108,7 @@
                     class="nav-item"
                     href="settings.html"
                 >
-                    <span class="nav-icon">
-                        ⚙
-                    </span>
-
+                    <span class="nav-icon">⚙</span>
                     Settings
                 </a>
 
@@ -130,7 +117,7 @@
         </aside>
 
 
-        <!-- Mobile Overlay -->
+        <!-- ==================== MOBILE OVERLAY ==================== -->
         <div
             class="mobile-overlay"
             id="mobileOverlay"
@@ -145,7 +132,6 @@
 
                 <div class="topbar-left">
 
-                    <!-- Mobile Menu -->
                     <button
                         class="mobile-menu"
                         id="mobileMenu"
@@ -171,10 +157,8 @@
                 </div>
 
 
-                <!-- Topbar Actions -->
                 <div class="topbar-actions">
 
-                    <!-- Theme Toggle -->
                     <button
                         class="theme-toggle"
                         id="themeToggle"
@@ -185,7 +169,6 @@
                     </button>
 
 
-                    <!-- User Avatar -->
                     <div
                         class="avatar avatar-sm"
                         id="headerAvatar"
@@ -199,7 +182,6 @@
             <!-- ==================== PAGE ==================== -->
             <section class="page narrow-page">
 
-                <!-- Page Header -->
                 <div class="page-header">
 
                     <div>
@@ -220,19 +202,19 @@
                 <!-- ==================== PROFILE LAYOUT ==================== -->
                 <div class="profile-layout">
 
+
                     <!-- ==================== PROFILE CARD ==================== -->
                     <div class="card profile-card">
 
-                        <!-- Cover -->
                         <div class="profile-cover"></div>
 
 
-                        <!-- Profile Main -->
                         <div class="profile-main">
 
-                            <!-- Profile Photo -->
-                           <div class="profile-photo-wrapper">
+                            <!-- PROFILE PHOTO -->
+                            <div class="profile-photo-wrapper">
 
+                                <!-- Initials fallback -->
                                 <div
                                     id="profileFallback"
                                     class="profile-photo-fallback"
@@ -240,17 +222,21 @@
                                 >
                                     JS
                                 </div>
-                            
+
+
+                                <!-- Actual profile image -->
                                 <img
                                     id="profilePreview"
                                     class="profile-photo"
+                                    src=""
                                     alt="Profile photo"
+                                    style="display: none;"
                                 >
-                            
+
                             </div>
 
 
-                            <!-- Upload Photo -->
+                            <!-- CHANGE PHOTO -->
                             <label
                                 class="photo-upload-btn"
                                 for="profilePhoto"
@@ -258,21 +244,23 @@
                                 Change profile photo
                             </label>
 
+
                             <input
                                 id="profilePhoto"
+                                name="profilePhoto"
                                 type="file"
-                                accept="image/*"
+                                accept="image/jpeg,image/png,image/webp,image/gif"
                                 hidden
                             >
 
 
-                            <!-- Display Name -->
+                            <!-- NAME -->
                             <h2 id="profileDisplayName">
                                 Job Seeker
                             </h2>
 
 
-                            <!-- Display Role -->
+                            <!-- ROLE -->
                             <p id="profileDisplayRole">
                                 Job Seeker
                             </p>
@@ -290,7 +278,8 @@
 
                         <div class="form-grid">
 
-                            <!-- Name -->
+
+                            <!-- NAME -->
                             <div class="form-group">
 
                                 <label for="profileName">
@@ -301,13 +290,14 @@
                                     id="profileName"
                                     name="name"
                                     type="text"
+                                    autocomplete="name"
                                     required
                                 >
 
                             </div>
 
 
-                            <!-- Role -->
+                            <!-- ROLE -->
                             <div class="form-group">
 
                                 <label for="profileRole">
@@ -318,12 +308,13 @@
                                     id="profileRole"
                                     name="role"
                                     type="text"
+                                    autocomplete="organization-title"
                                 >
 
                             </div>
 
 
-                            <!-- Email -->
+                            <!-- EMAIL -->
                             <div class="form-group">
 
                                 <label for="profileEmail">
@@ -334,12 +325,13 @@
                                     id="profileEmail"
                                     name="email"
                                     type="email"
+                                    autocomplete="email"
                                 >
 
                             </div>
 
 
-                            <!-- Phone -->
+                            <!-- PHONE -->
                             <div class="form-group">
 
                                 <label for="profilePhone">
@@ -350,12 +342,13 @@
                                     id="profilePhone"
                                     name="phone"
                                     type="tel"
+                                    autocomplete="tel"
                                 >
 
                             </div>
 
 
-                            <!-- Location -->
+                            <!-- LOCATION -->
                             <div class="form-group full-width">
 
                                 <label for="profileLocation">
@@ -366,12 +359,13 @@
                                     id="profileLocation"
                                     name="location"
                                     type="text"
+                                    autocomplete="address-level2"
                                 >
 
                             </div>
 
 
-                            <!-- Bio -->
+                            <!-- BIO -->
                             <div class="form-group full-width">
 
                                 <label for="profileBio">
@@ -381,6 +375,7 @@
                                 <textarea
                                     id="profileBio"
                                     name="bio"
+                                    rows="5"
                                     placeholder="Tell us a little about yourself..."
                                 ></textarea>
 
@@ -389,7 +384,7 @@
                         </div>
 
 
-                        <!-- Form Actions -->
+                        <!-- FORM ACTION -->
                         <div class="form-actions">
 
                             <button
@@ -421,7 +416,7 @@
     ></div>
 
 
-    <!-- Main JavaScript -->
+    <!-- ==================== JAVASCRIPT ==================== -->
     <script src="js/app.js"></script>
 
 </body>
