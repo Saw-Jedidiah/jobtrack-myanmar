@@ -1997,214 +1997,266 @@ function jobForm() {
 ========================================= */
 
 function profilePage() {
-  const form =
-    el("profileForm");
+  const form = el("profileForm");
 
   if (!form) {
     return;
   }
 
-  const currentProfile =
-    profile();
+  const currentProfile = profile();
 
-  /* -----------------------------------------
-     Fill fields
-  ----------------------------------------- */
+  /* =========================================
+     FORM FIELDS
+  ========================================= */
 
-  [
+  const fields = [
     "name",
     "role",
     "email",
     "phone",
     "location",
     "bio",
-  ].forEach(
-    (fieldName) => {
-      const field =
-        form.elements[
-          fieldName
-        ];
+  ];
 
-      if (field) {
-        field.value =
-          currentProfile[
-            fieldName
-          ] || "";
-      }
+  fields.forEach((fieldName) => {
+    const field = form.elements[fieldName];
+
+    if (field) {
+      field.value =
+        currentProfile[fieldName] || "";
     }
-  );
+  });
 
-  const preview =
-    el("profilePreview");
 
-  const fallback =
-    el("profileFallback");
+  /* =========================================
+     ELEMENTS
+  ========================================= */
 
-  const photoInput =
-    el("profilePhoto");
+  const preview = el("profilePreview");
+  const fallback = el("profileFallback");
+  const photoInput = el("profilePhoto");
 
-  /*
-     Keep photo data in this variable
-     until Save Profile is pressed.
-  */
+
+  /* =========================================
+     CURRENT PHOTO
+  ========================================= */
 
   let photo =
-    currentProfile.photo || "";
+    typeof currentProfile.photo === "string"
+      ? currentProfile.photo
+      : "";
 
-  /*
-     Render saved photo.
-  */
 
-  renderProfilePhoto();
+  /* =========================================
+     RENDER PHOTO
+  ========================================= */
 
-  /* -----------------------------------------
+  const renderPhoto = (photoData) => {
+
+    if (!preview) {
+      return;
+    }
+
+
+    /* No photo */
+
+    if (!photoData) {
+
+      preview.removeAttribute("src");
+
+      preview.style.display = "none";
+
+      if (fallback) {
+        const name =
+          form.elements.name?.value ||
+          currentProfile.name ||
+          "Job Seeker";
+
+        fallback.textContent =
+          initials(name);
+
+        fallback.style.display = "flex";
+      }
+
+      return;
+    }
+
+
+    /* Photo exists */
+
+    preview.onload = () => {
+
+      preview.style.display = "block";
+
+      if (fallback) {
+        fallback.style.display = "none";
+      }
+    };
+
+
+    preview.onerror = () => {
+
+      preview.removeAttribute("src");
+
+      preview.style.display = "none";
+
+      if (fallback) {
+
+        const name =
+          form.elements.name?.value ||
+          currentProfile.name ||
+          "Job Seeker";
+
+        fallback.textContent =
+          initials(name);
+
+        fallback.style.display = "flex";
+      }
+
+      toast(
+        "Unable to display this image.",
+        "error"
+      );
+    };
+
+
+    preview.alt =
+      `${
+        form.elements.name?.value ||
+        currentProfile.name ||
+        "Profile"
+      } profile photo`;
+
+    preview.src = photoData;
+  };
+
+
+  /* =========================================
+     INITIAL RENDER
+  ========================================= */
+
+  renderPhoto(photo);
+
+
+  /* =========================================
      PHOTO SELECT
-  ----------------------------------------- */
+  ========================================= */
 
-  photoInput?.addEventListener(
-    "change",
-    (event) => {
-      const file =
-        event.target.files?.[0];
+  if (photoInput) {
 
-      if (!file) {
-        return;
-      }
+    photoInput.addEventListener(
+      "change",
+      (event) => {
 
-      /*
-         Check image type.
-      */
+        const file =
+          event.target.files?.[0];
 
-      if (
-        !file.type ||
-        !file.type.startsWith(
-          "image/"
-        )
-      ) {
-        toast(
-          "Please select an image file.",
-          "error"
-        );
+        if (!file) {
+          return;
+        }
 
-        event.target.value =
-          "";
 
-        return;
-      }
+        /* -------------------------------
+           Validate image
+        ------------------------------- */
 
-      /*
-         Maximum 2MB.
-      */
-
-      const maxSize =
-        2 * 1024 * 1024;
-
-      if (file.size > maxSize) {
-        toast(
-          "Image must be smaller than 2MB.",
-          "error"
-        );
-
-        event.target.value =
-          "";
-
-        return;
-      }
-
-      /*
-         Read image.
-      */
-
-      const reader =
-        new FileReader();
-
-      reader.onload = () => {
         if (
-          typeof reader.result !==
-          "string"
+          !file.type ||
+          !file.type.startsWith("image/")
         ) {
+
           toast(
-            "Unable to preview this image.",
+            "Please select an image file.",
             "error"
           );
+
+          event.target.value = "";
 
           return;
         }
 
-        /*
-           Store the Data URL in memory.
-        */
 
-        photo =
-          reader.result;
+        /* -------------------------------
+           Maximum size: 2 MB
+        ------------------------------- */
 
-        /*
-           Show preview immediately.
-        */
+        const maxSize =
+          2 * 1024 * 1024;
 
-        if (preview) {
-          preview.onload = () => {
-            preview.style.display =
-              "block";
+        if (file.size > maxSize) {
 
-            if (fallback) {
-              fallback.style.display =
-                "none";
-            }
-          };
+          toast(
+            "Image must be smaller than 2MB.",
+            "error"
+          );
 
-          preview.onerror = () => {
-            preview.removeAttribute(
-              "src"
-            );
+          event.target.value = "";
 
-            preview.style.display =
-              "none";
+          return;
+        }
 
-            if (fallback) {
-              fallback.textContent =
-                initials(
-                  form.elements
-                    .name?.value ||
-                    currentProfile.name
-                );
 
-              fallback.style.display =
-                "flex";
-            }
+        /* -------------------------------
+           Read image
+        ------------------------------- */
+
+        const reader =
+          new FileReader();
+
+
+        reader.onload = () => {
+
+          if (
+            typeof reader.result !==
+            "string"
+          ) {
 
             toast(
-              "Unable to display this image.",
+              "Unable to preview this image.",
               "error"
             );
-          };
 
-          preview.alt =
-            `${
-              form.elements.name?.value ||
-              currentProfile.name ||
-              "Profile"
-            } profile photo`;
+            return;
+          }
 
-          preview.src =
-            photo;
-        }
-      };
 
-      reader.onerror = () => {
-        toast(
-          "Unable to read the selected image.",
-          "error"
-        );
-      };
+          /*
+           * Store Data URL temporarily.
+           * It will be saved to localStorage
+           * when Save Profile is clicked.
+           */
 
-      reader.readAsDataURL(file);
-    }
-  );
+          photo = reader.result;
 
-  /* -----------------------------------------
-     UPDATE INITIALS
-  ----------------------------------------- */
+
+          /* Immediate preview */
+
+          renderPhoto(photo);
+
+        };
+
+
+        reader.onerror = () => {
+
+          toast(
+            "Unable to read the selected image.",
+            "error"
+          );
+
+        };
+
+
+        reader.readAsDataURL(file);
+
+      }
+    );
+
+  }
+
+
+  /* =========================================
+     NAME INPUT
+  ========================================= */
 
   const nameField =
     form.elements.name;
@@ -2212,149 +2264,122 @@ function profilePage() {
   nameField?.addEventListener(
     "input",
     () => {
+
+      const name =
+        nameField.value.trim() ||
+        "Job Seeker";
+
+      /*
+       * Only update initials when
+       * there is no profile photo.
+       */
+
       if (
-        fallback &&
-        (!photo ||
-          !preview ||
-          preview.style.display ===
-            "none")
+        !photo &&
+        fallback
       ) {
+
         fallback.textContent =
-          initials(
-            nameField.value.trim() ||
-            "Job Seeker"
-          );
+          initials(name);
+
       }
+
     }
   );
 
-  /* -----------------------------------------
+
+  /* =========================================
      SAVE PROFILE
-  ----------------------------------------- */
+  ========================================= */
 
   form.addEventListener(
     "submit",
     (event) => {
+
       event.preventDefault();
 
-      if (
-        !form.reportValidity()
-      ) {
+
+      if (!form.reportValidity()) {
         return;
       }
+
 
       const formData =
         new FormData(form);
 
+
       const updatedProfile = {
+
         name:
           String(
-            formData.get("name") ||
-              ""
+            formData.get("name") || ""
           ).trim(),
 
         role:
           String(
-            formData.get("role") ||
-              ""
+            formData.get("role") || ""
           ).trim(),
 
         email:
           String(
-            formData.get("email") ||
-              ""
+            formData.get("email") || ""
           ).trim(),
 
         phone:
           String(
-            formData.get("phone") ||
-              ""
+            formData.get("phone") || ""
           ).trim(),
 
         location:
           String(
-            formData.get(
-              "location"
-            ) || ""
+            formData.get("location") || ""
           ).trim(),
 
         bio:
           String(
-            formData.get("bio") ||
-              ""
+            formData.get("bio") || ""
           ).trim(),
-
-        /*
-           IMPORTANT:
-           Keep the selected photo.
-        */
 
         photo:
           photo || "",
       };
 
-      /*
-         Debug information.
-         This does NOT use eval.
-      */
 
-      console.log(
-        "Profile save:",
-        {
-          name:
-            updatedProfile.name,
-
-          photo:
-            updatedProfile.photo
-              ? "PHOTO READY"
-              : "NO PHOTO",
-        }
-      );
+      /* --------------------------------
+         Save
+      -------------------------------- */
 
       const saved =
         saveProfile(
           updatedProfile
         );
 
+
       if (!saved) {
         return;
       }
 
-      /*
-         Read the profile again from
-         localStorage to make sure
-         the photo really exists.
-      */
 
-      const savedProfile =
-        profile();
-
-      console.log(
-        "Profile storage check:",
-        {
-          photo:
-            savedProfile.photo
-              ? "PHOTO SAVED"
-              : "NO PHOTO",
-        }
-      );
-
-      /*
-         Refresh all profile UI.
-      */
+      /* --------------------------------
+         Re-render everything
+      -------------------------------- */
 
       syncProfile();
 
-      /*
-         Keep the photo variable synced.
-      */
 
-      photo =
-        savedProfile.photo || "";
+      renderPhoto(
+        updatedProfile.photo
+      );
+
+
+      /* --------------------------------
+         Success
+      -------------------------------- */
 
       toast(
         "Profile saved successfully."
       );
+
     }
   );
 }
