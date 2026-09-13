@@ -1,421 +1,646 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
+  <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1"
-    >
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-    <title>Profile — JobTrack Myanmar</title>
+  <meta
+    name="description"
+    content="JobTrack Myanmar - Manage your job seeker profile"
+  >
 
-    <!-- Google Fonts -->
-    <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-    >
+  <title>Profile — JobTrack Myanmar</title>
 
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="css/style.css">
+  <link
+    rel="stylesheet"
+    href="css/style.css"
+  >
 </head>
 
 <body>
 
-    <div class="app">
-
-        <!-- ==================== SIDEBAR ==================== -->
-        <aside
-            class="sidebar"
-            id="sidebar"
-        >
-
-            <!-- Brand -->
-            <div class="brand">
-
-                <span class="brand-logo">
-                    JT
-                </span>
-
-                <span>
-                    JobTrack Myanmar
-                </span>
-
-            </div>
-
-
-            <!-- Navigation -->
-            <nav class="nav">
-
-                <a
-                    class="nav-item"
-                    href="index.html"
-                >
-                    <span class="nav-icon">
-                        ⌂
-                    </span>
-
-                    Dashboard
-                </a>
-
-
-                <a
-                    class="nav-item"
-                    href="applications.html"
-                >
-                    <span class="nav-icon">
-                        ▤
-                    </span>
-
-                    Applications
-                </a>
-
-
-                <a
-                    class="nav-item"
-                    href="kanban.html"
-                >
-                    <span class="nav-icon">
-                        ▥
-                    </span>
-
-                    Kanban Board
-                </a>
-
-
-                <a
-                    class="nav-item"
-                    href="add-job.html"
-                >
-                    <span class="nav-icon">
-                        ＋
-                    </span>
-
-                    Add Job
-                </a>
-
-
-                <!-- Account -->
-                <div class="nav-label">
-                    ACCOUNT
-                </div>
-
-
-                <a
-                    class="nav-item"
-                    href="profile.html"
-                >
-                    <span class="nav-icon">
-                        ◯
-                    </span>
-
-                    Profile
-                </a>
-
-
-                <a
-                    class="nav-item"
-                    href="settings.html"
-                >
-                    <span class="nav-icon">
-                        ⚙
-                    </span>
-
-                    Settings
-                </a>
-
-            </nav>
-
-        </aside>
-
-
-        <!-- Mobile Overlay -->
-        <div
-            class="mobile-overlay"
-            id="mobileOverlay"
-        ></div>
-
-
-        <!-- ==================== MAIN ==================== -->
-        <main class="main">
-
-            <!-- ==================== TOPBAR ==================== -->
-            <header class="topbar">
-
-                <div class="topbar-left">
-
-                    <!-- Mobile Menu -->
-                    <button
-                        class="mobile-menu"
-                        id="mobileMenu"
-                        type="button"
-                        aria-label="Open menu"
-                    >
-                        ☰
-                    </button>
-
-
-                    <div>
-
-                        <h1>
-                            Profile
-                        </h1>
-
-                        <p>
-                            Your personal information
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <!-- Topbar Actions -->
-                <div class="topbar-actions">
-
-                    <!-- Theme Toggle -->
-                    <button
-                        class="theme-toggle"
-                        id="themeToggle"
-                        type="button"
-                        aria-label="Toggle theme"
-                    >
-                        ☾
-                    </button>
-
-
-                    <!-- User Avatar -->
-                    <div
-                        class="avatar avatar-sm"
-                        id="headerAvatar"
-                    ></div>
-
-                </div>
-
-            </header>
-
-
-            <!-- ==================== PAGE ==================== -->
-            <section class="page narrow-page">
-
-                <!-- Page Header -->
-                <div class="page-header">
-
-                    <div>
-
-                        <p class="eyebrow">
-                            ACCOUNT
-                        </p>
-
-                        <h2>
-                            Profile
-                        </h2>
-
-                    </div>
-
-                </div>
-
-
-                <!-- ==================== PROFILE LAYOUT ==================== -->
-                <div class="profile-layout">
-
-                    <!-- ==================== PROFILE CARD ==================== -->
-                    <div class="card profile-card">
-
-                        <!-- Cover -->
-                        <div class="profile-cover"></div>
-
-
-                        <!-- Profile Main -->
-                        <div class="profile-main">
-
-                            <!-- Profile Photo -->
-                            <div class="profile-photo-wrapper">
-
-                                <img
-                                    id="profilePreview"
-                                    class="profile-photo"
-                                    alt="Profile photo"
-                                >
-
-                            </div>
-
-
-                            <!-- Upload Photo -->
-                            <label
-                                class="photo-upload-btn"
-                                for="profilePhoto"
-                            >
-                                Change profile photo
-                            </label>
-
-                            <input
-                                id="profilePhoto"
-                                type="file"
-                                accept="image/*"
-                                hidden
-                            >
-
-
-                            <!-- Display Name -->
-                            <h2 id="profileDisplayName">
-                                Job Seeker
-                            </h2>
-
-
-                            <!-- Display Role -->
-                            <p id="profileDisplayRole">
-                                Job Seeker
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- ==================== PROFILE FORM ==================== -->
-                    <form
-                        id="profileForm"
-                        class="card form-card"
-                    >
-
-                        <div class="form-grid">
-
-                            <!-- Name -->
-                            <div class="form-group">
-
-                                <label for="profileName">
-                                    Name
-                                </label>
-
-                                <input
-                                    id="profileName"
-                                    name="name"
-                                    type="text"
-                                    required
-                                >
-
-                            </div>
-
-
-                            <!-- Role -->
-                            <div class="form-group">
-
-                                <label for="profileRole">
-                                    Role
-                                </label>
-
-                                <input
-                                    id="profileRole"
-                                    name="role"
-                                    type="text"
-                                >
-
-                            </div>
-
-
-                            <!-- Email -->
-                            <div class="form-group">
-
-                                <label for="profileEmail">
-                                    Email
-                                </label>
-
-                                <input
-                                    id="profileEmail"
-                                    name="email"
-                                    type="email"
-                                >
-
-                            </div>
-
-
-                            <!-- Phone -->
-                            <div class="form-group">
-
-                                <label for="profilePhone">
-                                    Phone
-                                </label>
-
-                                <input
-                                    id="profilePhone"
-                                    name="phone"
-                                    type="tel"
-                                >
-
-                            </div>
-
-
-                            <!-- Location -->
-                            <div class="form-group full-width">
-
-                                <label for="profileLocation">
-                                    Location
-                                </label>
-
-                                <input
-                                    id="profileLocation"
-                                    name="location"
-                                    type="text"
-                                >
-
-                            </div>
-
-
-                            <!-- Bio -->
-                            <div class="form-group full-width">
-
-                                <label for="profileBio">
-                                    Bio
-                                </label>
-
-                                <textarea
-                                    id="profileBio"
-                                    name="bio"
-                                    placeholder="Tell us a little about yourself..."
-                                ></textarea>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- Form Actions -->
-                        <div class="form-actions">
-
-                            <button
-                                class="btn btn-primary"
-                                type="submit"
-                            >
-                                Save Profile
-                            </button>
-
-                        </div>
-
-                    </form>
-
-                </div>
-
-            </section>
-
-        </main>
+  <!-- =========================================
+       MOBILE OVERLAY
+  ========================================== -->
+
+  <div
+    id="mobileOverlay"
+    class="mobile-overlay"
+  ></div>
+
+
+  <!-- =========================================
+       SIDEBAR
+  ========================================== -->
+
+  <aside
+    id="sidebar"
+    class="sidebar"
+  >
+
+    <div class="sidebar-header">
+
+      <a
+        href="index.html"
+        class="brand"
+      >
+
+        <span class="brand-icon">
+          JT
+        </span>
+
+        <span class="brand-text">
+          JobTrack
+        </span>
+
+      </a>
+
+      <button
+        type="button"
+        class="sidebar-close"
+        id="sidebarClose"
+        aria-label="Close navigation"
+      >
+        ×
+      </button>
 
     </div>
 
 
-    <!-- ==================== TOAST ==================== -->
-    <div
-        class="toast"
-        id="toast"
-        role="status"
-        aria-live="polite"
-    ></div>
+    <!-- Profile summary -->
+
+    <div class="sidebar-profile">
+
+      <div
+        id="headerAvatar"
+        class="avatar"
+      >
+        JS
+      </div>
+
+      <div class="sidebar-profile-info">
+
+        <strong id="headerName">
+          Job Seeker
+        </strong>
+
+        <span id="headerRole">
+          Job Seeker
+        </span>
+
+      </div>
+
+    </div>
 
 
-    <!-- Main JavaScript -->
-    <script src="js/app.js"></script>
+    <!-- Navigation -->
+
+    <nav class="sidebar-nav">
+
+      <div class="nav-section">
+
+        <span class="nav-section-title">
+          MAIN
+        </span>
+
+        <a
+          href="index.html"
+        >
+          <span class="nav-icon">
+            ▦
+          </span>
+
+          <span>
+            Dashboard
+          </span>
+        </a>
+
+        <a
+          href="applications.html"
+        >
+          <span class="nav-icon">
+            ◫
+          </span>
+
+          <span>
+            Applications
+          </span>
+        </a>
+
+        <a
+          href="kanban.html"
+        >
+          <span class="nav-icon">
+            ▥
+          </span>
+
+          <span>
+            Kanban
+          </span>
+        </a>
+
+      </div>
+
+
+      <div class="nav-section">
+
+        <span class="nav-section-title">
+          ACCOUNT
+        </span>
+
+        <a
+          href="profile.html"
+          class="active"
+        >
+          <span class="nav-icon">
+            ◉
+          </span>
+
+          <span>
+            Profile
+          </span>
+        </a>
+
+        <a
+          href="settings.html"
+        >
+          <span class="nav-icon">
+            ⚙
+          </span>
+
+          <span>
+            Settings
+          </span>
+        </a>
+
+      </div>
+
+    </nav>
+
+
+    <!-- Sidebar bottom -->
+
+    <div class="sidebar-bottom">
+
+      <button
+        type="button"
+        class="theme-toggle"
+        aria-label="Switch to dark mode"
+        title="Switch to dark mode"
+      >
+        ☾
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- =========================================
+       MAIN
+  ========================================== -->
+
+  <main class="main-content">
+
+
+    <!-- =======================================
+         TOPBAR
+    ======================================== -->
+
+    <header class="topbar">
+
+      <div class="topbar-left">
+
+        <button
+          type="button"
+          id="mobileMenu"
+          class="mobile-menu-btn"
+          aria-label="Open navigation"
+        >
+          ☰
+        </button>
+
+        <div class="page-heading">
+
+          <h1>
+            Profile
+          </h1>
+
+          <p>
+            Manage your personal information
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="topbar-right">
+
+        <!-- Global search -->
+
+        <div class="search-box">
+
+          <span class="search-icon">
+            ⌕
+          </span>
+
+          <input
+            id="globalSearch"
+            type="search"
+            placeholder="Search applications..."
+            autocomplete="off"
+            aria-label="Search applications"
+          >
+
+        </div>
+
+
+        <!-- Theme -->
+
+        <button
+          type="button"
+          class="theme-toggle"
+          aria-label="Switch to dark mode"
+          title="Switch to dark mode"
+        >
+          ☾
+        </button>
+
+
+        <!-- Avatar -->
+
+        <div
+          id="topbarAvatar"
+          class="avatar topbar-avatar"
+        >
+          JS
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <!-- =======================================
+         PAGE CONTENT
+    ======================================== -->
+
+    <section class="page-content profile-page">
+
+
+      <!-- =====================================
+           PROFILE HEADER
+      ====================================== -->
+
+      <div class="profile-header-card">
+
+        <div class="profile-header-content">
+
+          <div
+            id="profileHeaderAvatar"
+            class="profile-large-avatar"
+          >
+            JS
+          </div>
+
+          <div class="profile-header-info">
+
+            <h2 id="profileDisplayName">
+              Job Seeker
+            </h2>
+
+            <p id="profileDisplayRole">
+              Job Seeker
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================
+           PROFILE FORM CARD
+      ====================================== -->
+
+      <div class="card profile-card">
+
+        <div class="card-header">
+
+          <div>
+
+            <h2>
+              Personal Information
+            </h2>
+
+            <p>
+              Update your profile details and photo.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- Profile form -->
+
+        <form
+          id="profileForm"
+          class="profile-form"
+        >
+
+
+          <!-- =================================
+               PROFILE PHOTO
+          ================================== -->
+
+          <div class="profile-photo-section">
+
+            <div class="profile-photo-wrapper">
+
+              <!-- Initials fallback -->
+
+              <div
+                id="profileFallback"
+                class="profile-photo-fallback"
+                aria-hidden="true"
+              >
+                JS
+              </div>
+
+
+              <!-- Uploaded image -->
+
+              <img
+                id="profilePreview"
+                class="profile-photo"
+                alt="Profile photo"
+              >
+
+            </div>
+
+
+            <div class="profile-photo-info">
+
+              <h3>
+                Profile Photo
+              </h3>
+
+              <p>
+                Upload a clear profile photo.
+              </p>
+
+              <label
+                class="photo-upload-btn"
+                for="profilePhoto"
+              >
+                Change profile photo
+              </label>
+
+              <input
+                id="profilePhoto"
+                name="photo"
+                type="file"
+                accept="image/*"
+                hidden
+              >
+
+              <small>
+                JPG, PNG, GIF or WebP. Maximum 2MB.
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <!-- =================================
+               FORM GRID
+          ================================== -->
+
+          <div class="form-grid">
+
+
+            <!-- Name -->
+
+            <div class="form-group">
+
+              <label for="profileName">
+                Full Name
+              </label>
+
+              <input
+                id="profileName"
+                name="name"
+                type="text"
+                placeholder="Enter your name"
+                autocomplete="name"
+                required
+              >
+
+            </div>
+
+
+            <!-- Role -->
+
+            <div class="form-group">
+
+              <label for="profileRole">
+                Current Role
+              </label>
+
+              <input
+                id="profileRole"
+                name="role"
+                type="text"
+                placeholder="e.g. Program Coordinator"
+                autocomplete="organization-title"
+                required
+              >
+
+            </div>
+
+
+            <!-- Email -->
+
+            <div class="form-group">
+
+              <label for="profileEmail">
+                Email Address
+              </label>
+
+              <input
+                id="profileEmail"
+                name="email"
+                type="email"
+                placeholder="your@email.com"
+                autocomplete="email"
+              >
+
+            </div>
+
+
+            <!-- Phone -->
+
+            <div class="form-group">
+
+              <label for="profilePhone">
+                Phone Number
+              </label>
+
+              <input
+                id="profilePhone"
+                name="phone"
+                type="tel"
+                placeholder="Enter your phone number"
+                autocomplete="tel"
+              >
+
+            </div>
+
+
+            <!-- Location -->
+
+            <div class="form-group">
+
+              <label for="profileLocation">
+                Location
+              </label>
+
+              <input
+                id="profileLocation"
+                name="location"
+                type="text"
+                placeholder="e.g. Yangon, Myanmar"
+                autocomplete="address-level2"
+              >
+
+            </div>
+
+
+            <!-- Bio -->
+
+            <div class="form-group form-group-full">
+
+              <label for="profileBio">
+                About Me
+              </label>
+
+              <textarea
+                id="profileBio"
+                name="bio"
+                rows="5"
+                placeholder="Write a short introduction about yourself..."
+              ></textarea>
+
+            </div>
+
+          </div>
+
+
+          <!-- =================================
+               FORM ACTIONS
+          ================================== -->
+
+          <div class="form-actions">
+
+            <button
+              type="submit"
+              class="btn btn-primary"
+            >
+              Save Profile
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+
+      <!-- =====================================
+           PROFILE PREVIEW
+      ====================================== -->
+
+      <div class="card profile-preview-card">
+
+        <div class="card-header">
+
+          <div>
+
+            <h2>
+              Profile Preview
+            </h2>
+
+            <p>
+              This is how your profile information appears in JobTrack.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="profile-preview-content">
+
+          <div
+            id="profilePreviewAvatar"
+            class="profile-preview-avatar"
+          >
+            JS
+          </div>
+
+          <div class="profile-preview-info">
+
+            <h3 id="profilePreviewName">
+              Job Seeker
+            </h3>
+
+            <p id="profilePreviewRole">
+              Job Seeker
+            </p>
+
+            <div
+              id="profilePreviewLocation"
+              class="profile-preview-location"
+            >
+              Myanmar
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================================
+       TOAST
+  ========================================== -->
+
+  <div
+    id="toast"
+    class="toast"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+
+  <!-- =========================================
+       JAVASCRIPT
+  ========================================== -->
+
+  <script src="js/app.js"></script>
 
 </body>
-
 </html>
